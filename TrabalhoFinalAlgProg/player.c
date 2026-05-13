@@ -43,6 +43,22 @@ void desceEscada(PLAYER *p, char mapa[30][30]){
     (*p).posY+=subirTiles;
 }
 
+void gravidade(PLAYER *p, int *terco){
+    if (*terco%3==0){
+        (*p).accY=1;
+        if ((*p).velY<COMP_COLUNA){
+            (*p).velY+=(*p).accY;
+        }
+        (*p).posY+=(*p).velY;
+    }
+    *terco++;
+}
+
+void corrigePersonagem(PLAYER *p){
+    (*p).posY/=COMP_COLUNA;
+    (*p).posY*=COMP_COLUNA;
+}
+
 int colidiuBordaEsquerda(PLAYER p){
     if (p.posX-1<0)
         return 1;
@@ -94,18 +110,9 @@ int playerNaDescida(PLAYER p, char mapa[30][30]){
     return checaPlayerMapa(p, mapa, 'D');
 }
 
-void gravidade(PLAYER *p, int *terco){
-    if (*terco%3==0){
-        (*p).accY=1;
-        if ((*p).velY<COMP_COLUNA){
-            (*p).velY+=(*p).accY;
-        }
-        (*p).posY+=(*p).velY;
-    }
-    *terco++;
-}
-
-void corrigePersonagem(PLAYER *p){
-    (*p).posY/=COMP_COLUNA;
-    (*p).posY*=COMP_COLUNA;
+int caiuDoMapa(PLAYER p){
+    if (p.posY>ALTURA+CABECALHO)
+        return 1;
+    else
+        return 0;
 }
