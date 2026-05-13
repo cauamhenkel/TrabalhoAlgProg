@@ -57,6 +57,17 @@ int colidiuBordaDireita(PLAYER p){
         return 0;
 }
 
+int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros){
+    int colidiu=0;
+    for (int i=0 ; i<qtdMonstros ; i++){
+        if ((p.posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA))
+            colidiu=1;
+        else if (((p.posX/COMP_LINHA)+1==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA))
+            colidiu=1;
+    }
+    return colidiu;
+}
+
 int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch){
     int posXGrid=p.posX/COMP_LINHA;
     int posYGrid=p.posY/COMP_COLUNA;
