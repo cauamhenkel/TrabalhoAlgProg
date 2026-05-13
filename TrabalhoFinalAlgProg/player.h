@@ -1,4 +1,5 @@
 #include "funcoesGerais.h"
+#include "monstro.h"
 
 typedef struct{
     int posX; int velX;
@@ -15,7 +16,9 @@ void corrigePersonagem(PLAYER *p);
 
 int colidiuBordaEsquerda(PLAYER p);
 int colidiuBordaDireita(PLAYER p);
+int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros);
 int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch);
 int playerNoChao(PLAYER p, char mapa[30][30]);
 int playerNaEscada(PLAYER p, char mapa[30][30]);
 int playerNaDescida(PLAYER p, char mapa[30][30]);
+int caiuDoMapa(PLAYER p);
