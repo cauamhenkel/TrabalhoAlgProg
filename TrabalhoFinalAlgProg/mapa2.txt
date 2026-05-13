@@ -1,27 +1,27 @@
                               
          D      F      D      
-         HZZZZZZZZZZZZZH      
+         ZZZZZZZZZZZZZZZ      
          H             H      
      D   S             S   D  
-    ZHZZZZZZZZZZZZZZZZZZZZZHZ 
+    ZZZZZZZZZZZZZZZZZZZZZZZZZ 
      H                     H  
      S     D        D      S  
-   ZZZZZZZZHZZZZZZZZHZZZZZZZZZ
+   ZZZZZZZZZZZZZZZZZZZZZZZZZZZ
            H        H         
   D        S        SE       D
-ZZHZZZZZZZZZ        ZZZZZZZZZH
+ZZZZZZZZZZZZ        ZZZZZZZZZZ
   H                          H
   S     D              D     S
-  ZZZZZZHZZZZZZZZZZZZZZHZZZZZZ
+  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
         H              H      
         S     D        S E    
  ZZZZZZZZZZZZZHZZZZZZZZZZZZZ  
               H               
        D      S      D        
-      ZHZZZZZZZZZZZZZHZ       
+      ZZZZZZZZZZZZZZZZZ       
        H             H        
  D    ES             S      D 
- HZZZZZZZZZZZZZZZZZZZZZZZZZZH 
+ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ 
  H                          H 
  S   P                      S 
 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
