@@ -30,7 +30,7 @@ int main(){
     iniciaPlayer(&p, mapa);
     iniciaMonstros(monstros, mapa);
 
-    InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
+    InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games DOIS");
     SetTargetFPS(60);
     HideCursor();
 
