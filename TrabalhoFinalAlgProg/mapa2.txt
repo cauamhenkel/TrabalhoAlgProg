@@ -15,7 +15,7 @@ ZZZZZZZZZZZZ        ZZZZZZZZZZ
   ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
         H              H      
         S     D        S E    
- ZZZZZZZZZZZZZHZZZZZZZZZZZZZ  
+ ZZZZZZZZZZZZZZZZZZZZZZZZZZZ  
               H               
        D      S      D        
       ZZZZZZZZZZZZZZZZZ       
@@ -24,7 +24,7 @@ ZZZZZZZZZZZZ        ZZZZZZZZZZ
  ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ 
  H                          H 
  S   P                      S 
-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
                               
                               
                               
