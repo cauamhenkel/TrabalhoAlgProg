@@ -22,15 +22,15 @@ int main(){
     PLAYER p;
     MONSTRO monstros[10]={};
 
-    arqMapa(nomeMapa,"2");
-    criaMapa(mapa,nomeMapa);
+    arqMapa(nomeMapa, "1");
+    criaMapa(mapa, nomeMapa);
 
     qtdMonstros = calculaQtdMonstros(mapa);
 
     iniciaPlayer(&p, mapa);
     iniciaMonstros(monstros, mapa);
 
-    InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games DOIS");
+    InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
     SetTargetFPS(60);
     HideCursor();
 
@@ -58,8 +58,10 @@ int main(){
         }
 	}
 	if (IsKeyPressed(KEY_SPACE)){
-        p.posY-=COMP_COLUNA/4;
-        p.velY-=COMP_COLUNA/2;
+        if (playerNoChao(p, mapa)){
+            p.posY-=COMP_COLUNA/4;
+            p.velY-=COMP_COLUNA/2;
+        }
 	}
 	if (playerNoChao(p, mapa)){
         corrigePersonagem(&p);
@@ -70,7 +72,12 @@ int main(){
         gravidade(&p, &terco);
 	}
 
+	regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
 	moveMonstros(monstros, qtdMonstros);
+
+    if (colidiuMonstro(p, monstros, qtdMonstros) || caiuDoMapa(p)){
+        p.saude=0;
+    }
 
     BeginDrawing();
 	ClearBackground(RAYWHITE);
