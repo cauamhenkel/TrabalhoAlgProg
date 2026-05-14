@@ -10,11 +10,19 @@ void iniciaPlayer(PLAYER *p, char mapa[30][30]){
         }
     }
     (*p).velX=COMP_COLUNA/5;
-    (*p).saude=1;
+    (*p).saude=3;
+    (*p).invencibilidade=0;
 }
 
 void desenhaPlayer(PLAYER p){
-    DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, BLUE);
+    if (p.invencibilidade % 10 > 5) // Player pisca quando toma dano
+        DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, RED);
+    else
+        DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, BLUE);
+}
+
+void exibeSaude(PLAYER p) {
+    DrawText(TextFormat("Saude: %d", p.saude), 10, 10, 20, RED);
 }
 
 void sobeEscada(PLAYER *p, char mapa[30][30]){
@@ -57,6 +65,18 @@ void gravidade(PLAYER *p, int *terco){
 void corrigePersonagem(PLAYER *p){
     (*p).posY/=COMP_COLUNA;
     (*p).posY*=COMP_COLUNA;
+}
+
+void danoPlayer(PLAYER *p){
+    (*p).saude--;
+    (*p).invencibilidade = FPS;
+}
+
+void matarPlayer(PLAYER *p, EstadoJogo *ej, int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros){
+    *ej = MENU;
+    (*iniciouMapa)=0;
+    (*iniciouPlayer)=0;
+    (*iniciouMonstros)=0;
 }
 
 int colidiuBordaEsquerda(PLAYER p){
@@ -108,6 +128,10 @@ int playerNaEscada(PLAYER p, char mapa[30][30]){
 
 int playerNaDescida(PLAYER p, char mapa[30][30]){
     return checaPlayerMapa(p, mapa, 'D');
+}
+
+int playerNoFinal(PLAYER p, char mapa[30][30]){
+    return checaPlayerMapa(p, mapa, 'F');
 }
 
 int caiuDoMapa(PLAYER p){
