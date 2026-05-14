@@ -1,4 +1,6 @@
 #include "player.h"
+#include "funcoesGerais.h"
+#include "raylib.h"
 
 void iniciaPlayer(PLAYER *p, char mapa[30][30]){
     for (int i=0 ; i<30 ; i++){
@@ -10,11 +12,14 @@ void iniciaPlayer(PLAYER *p, char mapa[30][30]){
         }
     }
     (*p).velX=COMP_COLUNA/5;
-    (*p).saude=1;
+    (*p).saude=3;
 }
 
 void desenhaPlayer(PLAYER p){
-    DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, BLUE);
+    if (p.invencibilidade % 10 > 5) // Player pisca quando toma dano
+        DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, RED);
+    else
+        DrawRectangle(p.posX, p.posY+CABECALHO, COMP_LINHA, COMP_COLUNA, BLUE);
 }
 
 void sobeEscada(PLAYER *p, char mapa[30][30]){
@@ -110,9 +115,30 @@ int playerNaDescida(PLAYER p, char mapa[30][30]){
     return checaPlayerMapa(p, mapa, 'D');
 }
 
+int playerNoFinal(PLAYER p, char mapa[30][30]){
+    return checaPlayerMapa(p, mapa, 'F');
+}
+
 int caiuDoMapa(PLAYER p){
     if (p.posY>ALTURA+CABECALHO)
         return 1;
     else
         return 0;
+}
+
+void exibeSaude(PLAYER p) {
+    DrawText(TextFormat("Saude: %d", p.saude), 10, 10, 20, RED);
+}
+
+void danoPlayer(PLAYER *p) {
+    (*p).saude -= 1;
+    (*p).invencibilidade = 60;
+}
+
+void matarPlayer(PLAYER *p, EstadoJogo *ej, int posX0, int posY0) {
+    *ej = MENU;
+    (*p).saude = 3;
+    (*p).posX = posX0;
+    (*p).posY = posY0;
+    (*p).invencibilidade = 0;
 }
