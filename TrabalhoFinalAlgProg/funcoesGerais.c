@@ -1,11 +1,15 @@
 #include "funcoesGerais.h"
 
-void arqMapa(char nomeMapa[12], const char *nMapa){
+void arqMapa(char nomeMapa[12], int numMapa){
+    char numString[3];
+
     for (int i=0 ; i<12; i++){
         nomeMapa[i]=0;
     }
+
+    sprintf(numString, "%d", numMapa);
     strcat(nomeMapa, "mapa");
-    strcat(nomeMapa, nMapa);
+    strcat(nomeMapa, numString);
     strcat(nomeMapa, ".txt");
 }
 
@@ -19,7 +23,7 @@ void criaMapa(char mapa[30][30], char *arq){
     for (int i=0 ; i<30 ; i++){
         for (int j=0 ; j<30 ; j++){
             ch=fgetc(leitura);
-            while (ch=='\n' || ch=='r')
+            while (ch=='\n' || ch=='\r')
                 ch=fgetc(leitura);
             mapa[i][j]=ch;
         }
@@ -49,4 +53,3 @@ void desenhaMapa(char mapa[30][30]){
         posY+=COMP_COLUNA;
     }
 }
-
