@@ -21,7 +21,7 @@ int main(){
 
     /* Variáveis gerais */
     EstadoJogo estado = MENU; // Variável usada para verificar o estado do jogo, começa no menu
-    int sair=0;
+    int sair=0;               // Flag usada para fechar o jogo
 
     /* Variáveis do menu */
     EstadoMenu opcaoMenu = MENU_JOGAR;
@@ -34,7 +34,6 @@ int main(){
     int qtdMonstros=0;        // Quantidade de monstros
     int terco=0;              // Variável para a gravidade seja contabilizada apenas a cada 3 frames
     int iniciouMapa=0, iniciouPlayer=0, iniciouMonstros=0; // Flags para iniciar apenas uma vez
-
     PLAYER p;                 // Variável com todas as informações do player
     MONSTRO monstros[10]={};  // Vetor com todos as informações de todos os monstros
 
@@ -69,13 +68,21 @@ int main(){
                         break;
                     case MENU_RANKING:
                         if (IsKeyPressed(KEY_ENTER))
-                            sair=1;
+                            estado = RANKING;
+
                         break;
                     case MENU_SAIR:
                         if (IsKeyPressed(KEY_ENTER))
                             sair=1;
                 }
                 break;
+
+                case RANKING:
+                    if (IsKeyPressed(KEY_ENTER)){
+                        estado=MENU;
+                        opcaoMenu=MENU_JOGAR;
+                    }
+                    break;
 
             case PAUSADO:
                 if (IsKeyPressed(KEY_UP)){
@@ -136,29 +143,31 @@ int main(){
                 moveMonstros(monstros, qtdMonstros);
 
                 if (IsKeyDown(KEY_D)){
-                    if (!colidiuBordaDireita(p)){
+                    if (!colidiuBordaDireita(p) && !colidiuParedeDireita(p, mapa)){
                         p.posX+=p.velX;
                     }
                 }
                 if (IsKeyDown(KEY_A)){
-                    if (!colidiuBordaEsquerda(p)){
+                    if (!colidiuBordaEsquerda(p) && !colidiuParedeEsquerda(p, mapa)){
                         p.posX-=p.velX;
                     }
                 }
-                if (IsKeyPressed(KEY_W)){
-                    if (playerNaEscada(p, mapa)){
-                    sobeEscada(&p, mapa);
+                if (IsKeyDown(KEY_W)){
+                    if (playerNaSubida(p, mapa) || playerNaEscada(p, mapa) || (playerNaDescida(p, mapa) && !pixelDeCimaVazio(p, mapa))){
+                        p.velY=4;
+                        p.posY-=p.velY;
                     }
                 }
-                if (IsKeyPressed(KEY_S)){
-                    if (playerNaDescida(p, mapa)){
-                        desceEscada(&p, mapa);
+                if (IsKeyDown(KEY_S)){
+                    if (playerNaDescida(p, mapa) || playerNaEscada(p, mapa)){
+                        p.velY=4;
+                        p.posY+=p.velY;
                     }
                 }
                 if (IsKeyPressed(KEY_SPACE)){
                     if (playerNoChao(p, mapa)){
                         p.posY-=COMP_COLUNA/4;
-                        p.velY-=COMP_COLUNA/2;
+                        p.velY-=COMP_COLUNA/2+1;
                     }
                 }
                 if (playerNoChao(p, mapa)){
@@ -169,7 +178,12 @@ int main(){
                 else{
                     if (colidiuTeto(p, mapa))
                         p.velY=0;
-                    gravidade(&p, &terco);
+                    if (!playerNaSubida(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscada(p, mapa)) {
+                        gravidade(&p, &terco);
+                    }
+                    else{
+                       p.velY=0;
+                    }
                 }
                 if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
                     danoPlayer(&p);
@@ -191,41 +205,28 @@ int main(){
                 }
                 break;
         }
-
         BeginDrawing();
             switch(estado){
                 case MENU:
                     ClearBackground(BLACK);
                     DrawText("Mario Games", (LARGURA/2) - (MeasureText("Mario Games", 50)/2), CABECALHO, 50, RED);
-                    if (opcaoMenu==MENU_JOGAR)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Jogar");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Jogar");
-                    if (opcaoMenu==MENU_RANKING)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Ranking");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Ranking");
-                    if (opcaoMenu==MENU_SAIR)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Sair");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Sair");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? GOLD : ORANGE, RED, "Jogar");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? GOLD : ORANGE, RED, "Ranking");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? GOLD : ORANGE, RED, "Sair");
+                    break;
+
+                case RANKING:
+                    ClearBackground(BLACK);
+                    DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", 50)/2), CABECALHO, 50, RED);
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 500, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Voltar ao menu");
                     break;
 
                 case PAUSADO:
                     ClearBackground(BLACK);
                     DrawText("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", 50)/2), CABECALHO, 50, RED);
-                    if (opcaoPause==PAUSE_CONTINUAR)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Continuar");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Continuar");
-                    if (opcaoPause==PAUSE_VOLTAR_AO_MENU)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Voltar ao menu");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Voltar ao menu");
-                    if (opcaoPause==PAUSE_SAIR)
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Sair");
-                    else
-                        desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, ORANGE, RED, "Sair");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 200, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? GOLD : ORANGE, RED, "Continuar");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 300, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? GOLD : ORANGE, RED, "Voltar ao menu");
+                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), 400, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
                     break;
 
                 case VITORIA:
