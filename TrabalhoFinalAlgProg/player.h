@@ -15,11 +15,11 @@ void desceEscada(PLAYER *p, char mapa[30][30]);
 void gravidade(PLAYER *p, int *terco);
 void corrigePersonagem(PLAYER *p);
 void danoPlayer(PLAYER *p);
-void matarPlayer(PLAYER *p, EstadoJogo *ej, int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros);
 
 int colidiuBordaEsquerda(PLAYER p);
 int colidiuBordaDireita(PLAYER p);
 int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros);
+int colidiuTeto(PLAYER p, char mapa[30][30]);
 int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch);
 int playerNoChao(PLAYER p, char mapa[30][30]);
 int playerNaEscada(PLAYER p, char mapa[30][30]);
