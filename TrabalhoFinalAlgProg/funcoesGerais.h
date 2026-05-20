@@ -17,9 +17,10 @@
 #define FONTE_BOTOES 20
 
 typedef enum {
+    MENU,
+    RANKING,
     EM_JOGO,
     PAUSADO,
-    MENU,
     VITORIA,
     DERROTA
 } EstadoJogo;
