@@ -10,7 +10,6 @@ void iniciaPlayer(PLAYER *p, char mapa[30][30]){
         }
     }
     (*p).velX=COMP_COLUNA/5;
-    (*p).saude=3;
     (*p).invencibilidade=0;
 }
 
@@ -30,7 +29,7 @@ void sobeEscada(PLAYER *p, char mapa[30][30]){
     int posYGrid=(*p).posY/COMP_COLUNA;
     int subirTiles=0;
 
-    while(mapa[posYGrid][posXGrid]!='D'){
+    while(mapa[posYGrid][posXGrid]!='D' && mapa[posYGrid][posXGrid+1]!='D'){
         subirTiles+=COMP_COLUNA;
         posYGrid--;
     }
@@ -43,12 +42,12 @@ void desceEscada(PLAYER *p, char mapa[30][30]){
     int posYGrid=(*p).posY/COMP_COLUNA;
     int subirTiles=0;
 
-    while(mapa[posYGrid][posXGrid]!='S'){
-        subirTiles+=COMP_COLUNA;
+    while(mapa[posYGrid][posXGrid]!='S' && mapa[posYGrid][posXGrid+1]!='S'){
+        subirTiles-=COMP_COLUNA;
         posYGrid++;
     }
 
-    (*p).posY+=subirTiles;
+    (*p).posY-=subirTiles;
 }
 
 void gravidade(PLAYER *p, int *terco){
@@ -70,13 +69,6 @@ void corrigePersonagem(PLAYER *p){
 void danoPlayer(PLAYER *p){
     (*p).saude--;
     (*p).invencibilidade = FPS;
-}
-
-void matarPlayer(PLAYER *p, EstadoJogo *ej, int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros){
-    *ej = MENU;
-    (*iniciouMapa)=0;
-    (*iniciouPlayer)=0;
-    (*iniciouMonstros)=0;
 }
 
 int colidiuBordaEsquerda(PLAYER p){
@@ -104,10 +96,20 @@ int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros){
     return colidiu;
 }
 
+int colidiuTeto(PLAYER p, char mapa[30][30]){
+    int posXGrid=p.posX/COMP_LINHA;
+    int posYGrid=(p.posY+1)/COMP_COLUNA;
+
+    if (mapa[posYGrid][posXGrid]=='Z')
+        return 1;
+    else
+        return 0;
+}
+
 int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch){
     int posXGrid=p.posX/COMP_LINHA;
     int posYGrid=p.posY/COMP_COLUNA;
-    if (mapa[posYGrid][posXGrid]==ch)
+    if (mapa[posYGrid][posXGrid]==ch || mapa[posYGrid][posXGrid+1]==ch)
         return 1;
     else
         return 0;
