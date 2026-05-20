@@ -128,6 +128,7 @@ int main(){
             case EM_JOGO:
                 if (!iniciouMapa){
                     criaMapa(mapa, fase, &estado);
+                    regulaMapa(mapa);
                     iniciouMapa=1;
                 }
                 if (!iniciouPlayer){
