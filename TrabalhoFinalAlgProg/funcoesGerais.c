@@ -32,6 +32,16 @@ void criaMapa(char mapa[30][30], int fase, EstadoJogo *estado){
     fclose(leitura);                                  // Fecha o arquivo
 }
 
+void regulaMapa(char mapa[30][30]){
+    for (int i=0 ; i<30 ; i++) {
+        for (int j=0 ; j<30 ; j++) {
+            if (mapa[i][j] == 'D') {
+                mapa[i+1][j] = 'H';
+            }
+        }
+    }
+}
+
 void desenhaMapa(char mapa[30][30]){
 /* Essa função desenha o mapa usando a matriz como referência */
     int posX=0, posY=0;              // Variáveis para desenhar os elementos do mapa
