@@ -98,6 +98,7 @@ int main(){
                     case PAUSE_VOLTAR_AO_MENU:
                         if (IsKeyPressed(KEY_ENTER))
                             estado=MENU;
+                            opcaoMenu=MENU_JOGAR;
                         break;
                     case PAUSE_SAIR:
                         if (IsKeyPressed(KEY_ENTER))
@@ -108,11 +109,13 @@ int main(){
             case VITORIA:
                 if (IsKeyPressed(KEY_ENTER))
                     estado = MENU;
+                    opcaoMenu=MENU_JOGAR;
                 break;
 
             case DERROTA:
                 if (IsKeyPressed(KEY_ENTER))
                     estado = MENU;
+                    opcaoMenu=MENU_JOGAR;
                 break;
 
             case EM_JOGO:
