@@ -1,33 +1,32 @@
 #include "funcoesGerais.h"
 
-void arqMapa(char nomeMapa[12], int numMapa){
-/* Essa função cria uma string com o nome do arquivo que será usado para criar o mapa da fase */
-    char numString[3];                 // Vetor para guardar a string do número da fase
-
-    for (int i=0 ; i<12; i++){         // Deixa a string zerada
-        nomeMapa[i]=0;
-    }
-
-    sprintf(numString, "%d", numMapa); // Transforma o número de entrada em uma string
-    strcat(nomeMapa, "mapa");          // Insere na string final a palavra mapa
-    strcat(nomeMapa, numString);       // Insere na string final o número da fase
-    strcat(nomeMapa, ".txt");          // Insere na string final o .txt
+void reiniciaFase(int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros){
+/* Essa função reinicia as flags para iniciar o jogo */
+    (*iniciouMapa)=0;
+    (*iniciouPlayer)=0;
+    (*iniciouMonstros)=0;
 }
 
-void criaMapa(char mapa[30][30], char *arq){
-/* Essa função transforma um arquivo de .txt formatado para ser um mapa em uma matriz 30 por 30 */
+void criaMapa(char mapa[30][30], int fase, EstadoJogo *estado){
+/* Essa função recebe um número de fase e transforma o arquivo .txt formatado dessa fase para ser um mapa em uma matriz 30 por 30 */
+/* Se passar da ultima fase (não tem mais nenhum arquivo para ler) dá a vitória */
     FILE *leitura;                           // Ponteiro usado para ler o arquivo
+    char nomeArquivo[12];
     char ch;                                 // Variável para salvar momentaneamente o caractere lido do arquivo
 
-    if ((leitura = fopen(arq, "r")) == NULL) // Abre o arquivo de entrada no ponteiro e faz algo se a leitura der errado
-        ;                                    // Ainda não foi definido nada caso a leitura der errado
+    sprintf(nomeArquivo, "mapa%d.txt", fase); // Salva o nome do arquivo que será aberto com base no número da fase de entrada
 
-    for (int i=0 ; i<30 ; i++){
-        for (int j=0 ; j<30 ; j++){
-            ch=fgetc(leitura);               // Lê o caractere do arquivo
-            while (ch=='\n' || ch=='\r')     // Se o caractere lido for algum de formatação (como enter)
-                ch=fgetc(leitura);           // Ignora e pega o próximo caractere, fica em loop até achar um caractere normal
-            mapa[i][j]=ch;                   // Salva o caractere na matriz
+    if ((leitura = fopen(nomeArquivo, "r")) == NULL){ // Abre o arquivo de entrada no ponteiro e se a leitura der errado
+        (*estado)=VITORIA;                            // Determina vitória (passou da última fase)
+    }
+    else{
+        for (int i=0 ; i<30 ; i++){
+            for (int j=0 ; j<30 ; j++){
+                ch=fgetc(leitura);               // Lê o caractere do arquivo
+                while (ch=='\n' || ch=='\r')     // Se o caractere lido for algum de formatação (como enter)
+                    ch=fgetc(leitura);           // Ignora e pega o próximo caractere, fica em loop até achar um caractere normal
+                mapa[i][j]=ch;                   // Salva o caractere na matriz
+            }
         }
     }
     fclose(leitura);                         // Fecha o arquivo
@@ -55,4 +54,17 @@ void desenhaMapa(char mapa[30][30]){
         }
         posY+=COMP_COLUNA;           // Após uma linha inteira desenhada, passa para a próxima linha
     }
+}
+
+void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]){
+    Rectangle retanguloBase = {posX, posY, largura, altura};
+    Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};
+    DrawRectangleRounded(retanguloBorda, 0.4, 6, corBorda);
+    DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);
+    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, RED);
+}
+
+void exibeFase(int fase){
+/* Essa função exibe no canto da tela a fase atual */
+    DrawText(TextFormat("Fase atual: %d", fase+1), 450, 10, 20, RED);
 }
