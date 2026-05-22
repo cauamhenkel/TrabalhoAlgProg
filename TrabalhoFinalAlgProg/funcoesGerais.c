@@ -32,12 +32,11 @@ void criaMapa(char mapa[30][30], int fase, EstadoJogo *estado){
     fclose(leitura);                                  // Fecha o arquivo
 }
 
-void regulaMapa(char mapa[30][30]){
-    for (int i=0 ; i<30 ; i++) {
-        for (int j=0 ; j<30 ; j++) {
-            if (mapa[i][j] == 'D') {
-                mapa[i+1][j] = 'H';
-            }
+void corrigeMapa(char mapa[30][30]){
+    for(int i=0 ; i<30 ; i++){
+        for(int j=0 ; j<30 ; j++){
+            if (mapa[i][j]=='D')
+                mapa[i+1][j]='X';
         }
     }
 }
@@ -56,6 +55,10 @@ void desenhaMapa(char mapa[30][30]){
                 case 'H':
                 case 'D':
                     DrawRectangle(posX, posY+CABECALHO, COMP_LINHA, COMP_COLUNA, ORANGE);
+                    break;
+                case 'X':
+                    DrawRectangle(posX, posY+CABECALHO, COMP_LINHA, COMP_COLUNA/2, BROWN);
+                    DrawRectangle(posX, posY+CABECALHO+COMP_COLUNA/2, COMP_LINHA, COMP_COLUNA/2, ORANGE);
                     break;
                 case 'F':            // Se for F desenha o final da fase
                     DrawRectangle(posX, posY+CABECALHO, COMP_LINHA, COMP_COLUNA, RED);
