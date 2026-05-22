@@ -22,6 +22,8 @@ int main(){
     /* Variáveis gerais */
     EstadoJogo estado = MENU; // Variável usada para verificar o estado do jogo, começa no menu
     int sair=0;               // Flag usada para fechar o jogo
+    int pontos;
+    TIPO_PLACAR placar[10];
 
     /* Variáveis do menu */
     EstadoMenu opcaoMenu = MENU_JOGAR;
@@ -32,7 +34,6 @@ int main(){
     char mapa[30][30];        // Matriz do mapa
     int fase;                 // Fase no momento
     int qtdMonstros=0;        // Quantidade de monstros
-    int terco=0;              // Variável para a gravidade seja contabilizada apenas a cada 3 frames
     int iniciouMapa=0, iniciouPlayer=0, iniciouMonstros=0; // Flags para iniciar apenas uma vez
     PLAYER p;                 // Variável com todas as informações do player
     MONSTRO monstros[10]={};  // Vetor com todos as informações de todos os monstros
@@ -128,7 +129,7 @@ int main(){
             case EM_JOGO:
                 if (!iniciouMapa){
                     criaMapa(mapa, fase, &estado);
-                    regulaMapa(mapa);
+                    corrigeMapa(mapa);
                     iniciouMapa=1;
                 }
                 if (!iniciouPlayer){
@@ -140,29 +141,42 @@ int main(){
                     iniciouMonstros=1;
                 }
 
+                if (IsKeyPressed(KEY_TAB)) {
+                    estado = PAUSADO;
+                    opcaoPause = PAUSE_CONTINUAR;
+                }
+
                 regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
                 moveMonstros(monstros, qtdMonstros);
 
                 if (IsKeyDown(KEY_D)){
-                    if (!colidiuBordaDireita(p) && !colidiuParedeDireita(p, mapa)){
+                    if (!colidiuBordaDireita(p) && !colidiuParedeDireita(p, mapa) && !p.naEscada){
                         p.posX+=p.velX;
                     }
                 }
                 if (IsKeyDown(KEY_A)){
-                    if (!colidiuBordaEsquerda(p) && !colidiuParedeEsquerda(p, mapa)){
+                    if (!colidiuBordaEsquerda(p) && !colidiuParedeEsquerda(p, mapa) && !p.naEscada){
                         p.posX-=p.velX;
                     }
                 }
                 if (IsKeyDown(KEY_W)){
-                    if (playerNaSubida(p, mapa) || playerNaEscada(p, mapa) || (playerNaDescida(p, mapa) && !pixelDeCimaVazio(p, mapa))){
-                        p.velY=4;
-                        p.posY-=p.velY;
+                    if (playerNaSubida(p, mapa) || playerNaEscada(p, mapa) || playerNaDescida(p, mapa)){
+                        p.naEscada=1;
+                        centralizaPlayerNaEscada(&p, mapa);
+                    }
+                    if (p.naEscada){
+                        if (!pixelDeCimaVazio(p, mapa)){
+                            p.posY-=5;
+                        }
                     }
                 }
                 if (IsKeyDown(KEY_S)){
-                    if (playerNaDescida(p, mapa) || playerNaEscada(p, mapa)){
-                        p.velY=4;
-                        p.posY+=p.velY;
+                    if (playerNaSubida(p, mapa) || playerNaEscada(p, mapa) || playerNaDescida(p, mapa)){
+                        p.naEscada=1;
+                        centralizaPlayerNaEscada(&p, mapa);
+                    }
+                    if (p.naEscada && !playerNoChao(p, mapa)){
+                        p.posY+=5;
                     }
                 }
                 if (IsKeyPressed(KEY_SPACE)){
@@ -170,8 +184,10 @@ int main(){
                         p.posY-=COMP_COLUNA/4;
                         p.velY-=COMP_COLUNA/2+1;
                     }
+                    if (p.naEscada)
+                        p.naEscada=0;  // Tira da escada
                 }
-                if (playerNoChao(p, mapa)){
+                if (playerNoChao(p, mapa) || playerNaPlataforma(p, mapa) && !p.naEscada){
                     corrigePersonagem(&p);
                     p.velY=0;
                     p.accY=0;
@@ -179,13 +195,14 @@ int main(){
                 else{
                     if (colidiuTeto(p, mapa))
                         p.velY=0;
-                    if (!playerNaSubida(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscada(p, mapa)) {
-                        gravidade(&p, &terco);
-                    }
-                    else{
-                       p.velY=0;
-                    }
+                    if (!p.naEscada)
+                        gravidade(&p);
                 }
+                if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
+                    corrigePersonagem(&p);
+                    p.posY+=COMP_COLUNA;
+                }
+
                 if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
                     danoPlayer(&p);
                 }
@@ -199,10 +216,6 @@ int main(){
                 if (playerNoFinal(p, mapa)) {
                     reiniciaFase(&iniciouMapa, &iniciouPlayer, &iniciouMonstros);
                     fase++;
-                }
-                if (IsKeyPressed(KEY_TAB)) {
-                    estado = PAUSADO;
-                    opcaoPause = PAUSE_CONTINUAR;
                 }
                 break;
         }
