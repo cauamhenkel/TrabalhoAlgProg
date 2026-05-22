@@ -11,6 +11,7 @@ void iniciaPlayer(PLAYER *p, char mapa[30][30]){
     }
     (*p).velX=COMP_COLUNA/5;
     (*p).invencibilidade=0;
+    (*p).naEscada=0;
 }
 
 void desenhaPlayer(PLAYER p){
@@ -24,20 +25,33 @@ void exibeSaude(PLAYER p) {
     DrawText(TextFormat("Saude: %d", p.saude), 10, 10, 20, RED);
 }
 
-void gravidade(PLAYER *p, int *terco){
-    if (*terco%3==0){
+void gravidade(PLAYER *p){
         (*p).accY=1;
+
         if ((*p).velY<COMP_COLUNA){
             (*p).velY+=(*p).accY;
         }
         (*p).posY+=(*p).velY;
-    }
-    *terco++;
 }
 
 void corrigePersonagem(PLAYER *p){
     (*p).posY/=COMP_COLUNA;
     (*p).posY*=COMP_COLUNA;
+}
+
+void centralizaPlayerNaEscada(PLAYER *p, char mapa[30][30]){
+    int posXGrid=(*p).posX/COMP_LINHA;
+    int posYGrid=(*p).posY/COMP_COLUNA;
+
+    if (mapa[posYGrid][posXGrid]=='S' || mapa[posYGrid][posXGrid]=='H' || mapa[posYGrid][posXGrid]=='D'){
+        (*p).posX/=COMP_LINHA;
+        (*p).posX*=COMP_LINHA;
+    }
+    else if (mapa[posYGrid][posXGrid+1]=='S' || mapa[posYGrid][posXGrid+1]=='H' || mapa[posYGrid][posXGrid+1]=='D'){
+        (*p).posX/=COMP_LINHA;
+        (*p).posX*=COMP_LINHA;
+        (*p).posX+=COMP_LINHA;
+    }
 }
 
 void danoPlayer(PLAYER *p){
@@ -103,23 +117,33 @@ int colidiuParedeEsquerda(PLAYER p, char mapa[30][30]){
         return 0;
 }
 
-int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch){
-    int posXGridEsquerda=p.posX/COMP_LINHA;
-    int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
-    int posYGrid=p.posY/COMP_COLUNA;
-
-    if (mapa[posYGrid][posXGridEsquerda]==ch || mapa[posYGrid][posXGridDireita]==ch)
-        return 1;
-    else
-        return 0;
-}
-
 int playerNoChao(PLAYER p, char mapa[30][30]){
     int posXGridEsquerda=p.posX/COMP_LINHA;
     int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
     int posYGrid=p.posY/COMP_COLUNA;
 
     if (mapa[posYGrid+1][posXGridEsquerda]=='Z' || mapa[posYGrid+1][posXGridDireita]=='Z')
+        return 1;
+    else
+        return 0;
+}
+
+int playerNaPlataforma(PLAYER p, char mapa[30][30]){
+    int posXGridEsquerda=p.posX/COMP_LINHA;
+    int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
+    int posYGrid=p.posY/COMP_COLUNA;
+
+    if (mapa[posYGrid+1][posXGridEsquerda]=='X' || mapa[posYGrid+1][posXGridDireita]=='X')
+        return 1;
+    else
+        return 0;
+}
+int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch){
+    int posXGridEsquerda=p.posX/COMP_LINHA;
+    int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
+    int posYGrid=p.posY/COMP_COLUNA;
+
+    if (mapa[posYGrid][posXGridEsquerda]==ch || mapa[posYGrid][posXGridDireita]==ch)
         return 1;
     else
         return 0;
@@ -135,6 +159,10 @@ int playerNaEscada(PLAYER p, char mapa[30][30]){
 
 int playerNaDescida(PLAYER p, char mapa[30][30]){
     return checaPlayerMapa(p, mapa, 'D');
+}
+
+int playerNaEscadaComPlataforma(PLAYER p, char mapa[30][30]){
+    return checaPlayerMapa(p, mapa, 'X');
 }
 
 int playerNoFinal(PLAYER p, char mapa[30][30]){
