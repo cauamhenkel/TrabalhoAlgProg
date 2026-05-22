@@ -37,9 +37,15 @@ typedef enum {
     PAUSE_SAIR
 } EstadoPausado;
 
+typedef struct tipo_placar
+{
+char nome[20];
+int pontos;
+} TIPO_PLACAR;
+
 void reiniciaFase(int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros);
 void criaMapa(char mapa[30][30], int fase, EstadoJogo *estado);
-void regulaMapa(char mapa[30][30]);
+void corrigeMapa(char mapa[30][30]);
 void desenhaMapa(char mapa[30][30]);
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]);
 void exibeFase(int fase);
