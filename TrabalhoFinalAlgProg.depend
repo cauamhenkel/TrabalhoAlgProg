@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1778623847 source:c:\programas\trabalhos\trabalhofinalalgprog\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"raylib.h"
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+
+1778539681 c:\raylib-1\include\raylib.h
+	<stdarg.h>
+	<stdbool.h>
+
+1778621460 source:c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.c
+	"funcoesGerais.h"
+
+1778622505 c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.h
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1778547087 source:c:\programas\trabalhos\trabalhofinalalgprog\testes.c
+
+1778622114 source:c:\programas\trabalhos\trabalhofinalalgprog\player.c
+	"player.h"
+
+1778621129 c:\programas\trabalhos\trabalhofinalalgprog\player.h
+	"funcoesGerais.h"
+
+1778622798 source:c:\programas\trabalhos\trabalhofinalalgprog\monstro.c
+	"monstro.h"
+
+1778622798 c:\programas\trabalhos\trabalhofinalalgprog\monstro.h
+	"funcoesGerais.h"
+
