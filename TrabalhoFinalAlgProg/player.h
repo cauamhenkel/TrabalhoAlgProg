@@ -2,33 +2,40 @@
 #include "monstro.h"
 
 typedef struct{
-    int posX; int velX;
-    int posY; int velY; int accY;
-    int saude; int invencibilidade;
-    int naEscada;
+    int posX; float velX, accX;
+    int posY; float velY, accY;
+    int saude, invencibilidade;
+    int naEscada, afetadoGravidade;
 } PLAYER;
 
-void iniciaPlayer(PLAYER *p, char mapa[30][30]);
-void desenhaPlayer(PLAYER p);
+void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
+void desenhaPlayer(PLAYER p, Texture2D sprite);
 void exibeSaude(PLAYER p);
-void gravidade(PLAYER *p);
-void corrigePersonagem(PLAYER *p);
-void centralizaPlayerNaEscada(PLAYER *p, char mapa[30][30]);
+void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaGravidadePlayer(PLAYER *p);
+void processaAceleracaoPlayer(PLAYER *p);
+void processaAtritoPlayer(PLAYER *p);
+void corrigePersonagemY(PLAYER *p);
+void centralizaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
 void danoPlayer(PLAYER *p);
+void processaMovimentoPlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
+void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]);
 
 int colidiuBordaEsquerda(PLAYER p);
 int colidiuBordaDireita(PLAYER p);
 int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros);
-int colidiuTeto(PLAYER p, char mapa[30][30]);
-int colidiuParedeDireita(PLAYER p, char mapa[30][30]);
-int colidiuParedeEsquerda(PLAYER p, char mapa[30][30]);
-int playerNoChao(PLAYER p, char mapa[30][30]);
-int playerNaPlataforma(PLAYER p, char mapa[30][30]);
-int checaPlayerMapa(PLAYER p, char mapa[30][30], char ch);
-int playerNaSubida(PLAYER p, char mapa[30][30]);
-int playerNaEscada(PLAYER p, char mapa[30][30]);
-int playerNaDescida(PLAYER p, char mapa[30][30]);
-int playerNaEscadaComPlataforma(PLAYER p, char mapa[30][30]);
-int playerNoFinal(PLAYER p, char mapa[30][30]);
+int colidiuTeto(PLAYER p, char mapa[TILES][TILES]);
+int colidiuParedeDireita(PLAYER p, char mapa[TILES][TILES]);
+int colidiuParedeEsquerda(PLAYER p, char mapa[TILES][TILES]);
+int playerNoChao(PLAYER p, char mapa[TILES][TILES]);
+int playerNaPlataforma(PLAYER p, char mapa[TILES][TILES]);
+int checaPlayerMapa(PLAYER p, char mapa[TILES][TILES], char ch);
+int playerNaSubida(PLAYER p, char mapa[TILES][TILES]);
+int playerNaEscada(PLAYER p, char mapa[TILES][TILES]);
+int playerNaDescida(PLAYER p, char mapa[TILES][TILES]);
+int playerNaEscadaComPlataforma(PLAYER p, char mapa[TILES][TILES]);
+int playerNoFinal(PLAYER p, char mapa[TILES][TILES]);
 int caiuDoMapa(PLAYER p);
-int pixelDeCimaVazio(PLAYER p, char mapa[30][30]);
+int pixelDeCimaVazio(PLAYER p, char mapa[TILES][TILES]);
