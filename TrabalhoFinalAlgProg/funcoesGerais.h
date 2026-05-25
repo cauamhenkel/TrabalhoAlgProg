@@ -60,10 +60,9 @@ typedef enum {
     PAUSE_SAIR
 } EstadoPausado;
 
-typedef struct tipo_placar
-{
-char nome[20];
-int pontos;
+typedef struct tipo_placar{
+    char nome[20];
+    int pontos;
 } TIPO_PLACAR;
 
 void reiniciaFase(int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros);
