@@ -9,11 +9,14 @@ void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
             }
         }
     }
+    p->dir=DIREITA;
     p->velX=0;
     p->velY=0;
     p->accX=P_ACC_X;
     p->invencibilidade=0;
     p->naEscada=0;
+    p->qtdTiros=P_QTD_TIROS;
+    p->cooldown=0;
 }
 
 void desenhaPlayer(PLAYER p, Texture2D sprite){
@@ -27,7 +30,11 @@ void desenhaPlayer(PLAYER p, Texture2D sprite){
 }
 
 void exibeSaude(PLAYER p) {
-    DrawText(TextFormat("Saude: %d", p.saude), 10, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+    DrawText(TextFormat("Saude: %d", p.saude), COMP_COLUNA/2, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+}
+
+void exibeQtdTiros(PLAYER p){
+    DrawText(TextFormat("Tiros restantes: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
 }
 
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]) {
@@ -94,6 +101,7 @@ void danoPlayer(PLAYER *p){
 void processaMovimentoPlayer(PLAYER *p, char mapa[TILES][TILES]) {
     if (IsKeyDown(KEY_D)){
         p->naEscada = 0;
+        p->dir=DIREITA;
 
         if (p->velX < P_VEL_X_MAX) {
             p->velX+=p->accX;
@@ -101,6 +109,7 @@ void processaMovimentoPlayer(PLAYER *p, char mapa[TILES][TILES]) {
     }
     if (IsKeyDown(KEY_A)){
         p->naEscada = 0;
+        p->dir=ESQUERDA;
 
         if (p->velX > (P_VEL_X_MAX * -1)) {
             p->velX-=p->accX;
@@ -177,9 +186,9 @@ int colidiuBordaDireita(PLAYER p){
 int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros){
     int colidiu=0;
     for (int i=0 ; i<qtdMonstros ; i++){
-        if ((p.posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA))
+        if ((p.posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO)
             colidiu=1;
-        else if (((p.posX/COMP_LINHA)+1==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA))
+        else if (((p.posX/COMP_LINHA)+1==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO)
             colidiu=1;
     }
     return colidiu;
