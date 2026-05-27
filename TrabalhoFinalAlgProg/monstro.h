@@ -6,6 +6,7 @@
 typedef struct{
     int posX, velX;
     int posY;
+    EstadoObjeto estadoMonstro;
 } MONSTRO;
 
 void iniciaMonstros(MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES], int *qtdMonstros);
