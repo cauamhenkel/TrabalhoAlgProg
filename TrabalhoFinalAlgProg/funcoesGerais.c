@@ -1,12 +1,5 @@
 #include "funcoesGerais.h"
 
-void reiniciaFase(int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros){
-/* Essa função reinicia as flags para iniciar o jogo */
-    (*iniciouMapa)=0;
-    (*iniciouPlayer)=0;
-    (*iniciouMonstros)=0;
-}
-
 void criaMapa(char mapa[TILES][TILES], int fase, EstadoJogo *estado){
 /* Essa função recebe um número de fase e transforma o arquivo .txt formatado dessa fase para ser um mapa em uma matriz 30 por 30 */
 /* Se passar da ultima fase (não tem mais nenhum arquivo para ler) dá a vitória */
