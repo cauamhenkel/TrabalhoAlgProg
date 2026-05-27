@@ -10,7 +10,7 @@
 #define FPS 60
 
 #define TILES 30
-#define COMP_LINHA 30
+#define COMP_LINHA 20
 #define COMP_COLUNA 20
 
 #define LARGURA (COMP_LINHA*TILES) // Define a largura da tela
@@ -34,12 +34,14 @@
 #define P_ACC_X (P_VEL_X_MAX / 8.0f)
 #define P_VEL_ESCADA (COMP_COLUNA/5)
 #define P_VEL_PULO -(COMP_COLUNA/2)
+#define P_VIDA_MAX 3
+#define P_QTD_TIROS 100
 
 /* CONSTANTES MONSTRO */
-#define M_QTD_MAX 100
+#define M_QTD_MAX 20
 #define M_VEL_X (COMP_LINHA/8)
 
-typedef enum {
+typedef enum{
     MENU,
     RANKING,
     EM_JOGO,
@@ -48,24 +50,33 @@ typedef enum {
     DERROTA
 } EstadoJogo;
 
-typedef enum {
+typedef enum{
     MENU_JOGAR,
     MENU_RANKING,
     MENU_SAIR
 } EstadoMenu;
 
-typedef enum {
+typedef enum{
     PAUSE_CONTINUAR,
     PAUSE_VOLTAR_AO_MENU,
     PAUSE_SAIR
 } EstadoPausado;
+
+typedef enum{
+    DIREITA,
+    ESQUERDA
+} Direcao;
+
+typedef enum{
+    ATIVO,
+    DESATIVADO
+} EstadoObjeto;
 
 typedef struct tipo_placar{
     char nome[20];
     int pontos;
 } TIPO_PLACAR;
 
-void reiniciaFase(int *iniciouMapa, int *iniciouPlayer, int *iniciouMonstros);
 void criaMapa(char mapa[TILES][TILES], int fase, EstadoJogo *estado);
 void corrigeMapa(char mapa[TILES][TILES]);
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]);
