@@ -7,6 +7,7 @@
 #include "player.h"
 #include "monstro.h"
 #include "graficos.h"
+#include "extras.h"
 
 int main(){
 
@@ -26,12 +27,13 @@ int main(){
     EstadoPausado opcaoPause = PAUSE_CONTINUAR;
 
     /* Variáveis do jogo */
-    char mapa[TILES][TILES];        // Matriz do mapa
-    int fase;                 // Fase no momento
-    int qtdMonstros=0;        // Quantidade de monstros
-    int iniciouMapa=0, iniciouPlayer=0, iniciouMonstros=0; // Flags para iniciar apenas uma vez
-    PLAYER p;                 // Variável com todas as informações do player
+    char mapa[TILES][TILES];         // Matriz do mapa
+    int fase;                        // Fase no momento
+    int qtdMonstros=0;               // Quantidade de monstros
+    int iniciouFase=0;               // Flag para iniciar apenas uma vez
+    PLAYER p;                        // Variável com todas as informações do player
     MONSTRO monstros[M_QTD_MAX]={};  // Vetor com todos as informações de todos os monstros
+    PROJETIL pr;
 
     /* Início do código */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
@@ -60,9 +62,9 @@ int main(){
                     case MENU_JOGAR:
                         if (IsKeyPressed(KEY_ENTER)){
                             estado = EM_JOGO;
-                            reiniciaFase(&iniciouMapa, &iniciouPlayer, &iniciouMonstros);
+                            iniciouFase=0;
                             fase=0;
-                            p.saude=3;
+                            p.saude=P_VIDA_MAX;
                         }
                         break;
                     case MENU_RANKING:
@@ -125,18 +127,13 @@ int main(){
                 break;
 
             case EM_JOGO:
-                if (!iniciouMapa){
+                if (!iniciouFase){
                     criaMapa(mapa, fase, &estado);
                     corrigeMapa(mapa);
-                    iniciouMapa=1;
-                }
-                if (!iniciouPlayer){
                     iniciaPlayer(&p, mapa);
-                    iniciouPlayer=1;
-                }
-                if (!iniciouMonstros){
                     iniciaMonstros(monstros, mapa, &qtdMonstros);
-                    iniciouMonstros=1;
+                    pr.estado=DESATIVADO;
+                    iniciouFase=1;
                 }
 
                 if (IsKeyPressed(KEY_TAB)) {
@@ -162,9 +159,28 @@ int main(){
                 /* COLISOES PLAYER */
                 processaColisoesPlayer(&p, mapa);
 
+                /* PROJETIL */
+                if (IsKeyPressed(KEY_K) && !p.naEscada && p.qtdTiros>0 && p.cooldown==0){
+                    criaProjetil(p, &pr);
+                    p.cooldown=FPS;
+
+                    if (p.qtdTiros>0){
+                        p.qtdTiros--;
+                    }
+                }
+                if (pr.estado==ATIVO){
+                    moveProjetil(&pr);
+                    processaColisoesProjetil(&pr, monstros, mapa);
+                }
+                if (p.cooldown>0){
+                    p.cooldown--;
+                }
+                mataMonstrosProjetil(&pr, monstros, qtdMonstros);
+
                 if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
-                    corrigePersonagemY(&p);
-                    p.posY+=COMP_COLUNA;
+                    // Caso o player ocorra de subir demais a escada
+                    corrigePersonagemY(&p); // Corrige o personagem (acaba jogando ele pra cima)
+                    p.posY+=COMP_COLUNA;    // Bota ele pra baixo
                 }
 
                 if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
@@ -175,10 +191,9 @@ int main(){
                 }
                 if (p.saude == 0 || caiuDoMapa(p)) {
                     estado = DERROTA;
-                    fase=0;
                 }
                 if (playerNoFinal(p, mapa)) {
-                    reiniciaFase(&iniciouMapa, &iniciouPlayer, &iniciouMonstros);
+                    iniciouFase=0;
                     fase++;
                 }
                 break;
@@ -225,7 +240,9 @@ int main(){
                     desenhaMapa(mapa, sprites.tileset);
                     desenhaPlayer(p, sprites.player);
                     desenhaMonstros(monstros, qtdMonstros, sprites.monstro);
+                    desenhaProjetil(pr);
                     exibeSaude(p);
+                    exibeQtdTiros(p);
                     exibeFase(fase);
                     break;
             }
@@ -234,7 +251,6 @@ int main(){
 
     descarregaSpritesheet(&sprites);
     CloseWindow();
-
     return 0;
 }
 
