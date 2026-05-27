@@ -1,16 +1,22 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "funcoesGerais.h"
 #include "monstro.h"
 
 typedef struct{
     int posX; float velX, accX;
     int posY; float velY, accY;
+    Direcao dir;
     int saude, invencibilidade;
     int naEscada, afetadoGravidade;
+    int qtdTiros, cooldown;
 } PLAYER;
 
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void desenhaPlayer(PLAYER p, Texture2D sprite);
 void exibeSaude(PLAYER p);
+void exibeQtdTiros(PLAYER p);
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaGravidadePlayer(PLAYER *p);
 void processaAceleracaoPlayer(PLAYER *p);
@@ -39,3 +45,5 @@ int playerNaEscadaComPlataforma(PLAYER p, char mapa[TILES][TILES]);
 int playerNoFinal(PLAYER p, char mapa[TILES][TILES]);
 int caiuDoMapa(PLAYER p);
 int pixelDeCimaVazio(PLAYER p, char mapa[TILES][TILES]);
+
+#endif
