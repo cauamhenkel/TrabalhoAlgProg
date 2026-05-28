@@ -31,11 +31,12 @@ void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char ma
     }
 }
 
-void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros){
+void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
     for (int i=0 ; i<qtdMonstros ; i++){
         if ((pr->posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (pr->posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO){
             monstros[i].estadoMonstro=DESATIVADO;
             pr->estado=DESATIVADO;
+            *pontos+=500;
         }
     }
 }
@@ -43,5 +44,5 @@ void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros){
 void desenhaProjetil(PROJETIL pr){
     if (pr.estado==ATIVO)
         DrawRectangle(pr.posX, pr.posY+(COMP_COLUNA*2), COMP_LINHA/5, COMP_COLUNA/5, WHITE);
-        // Por algum motivo precisa desenhar mais pra baixo a posiÁ„o do tiro, sen„o ele sai voando
+        // Por algum motivo precisa desenhar mais pra baixo a posi√ß√£o do tiro, sen√£o ele sai voando
 }
