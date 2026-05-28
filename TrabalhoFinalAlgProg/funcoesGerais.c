@@ -43,7 +43,11 @@ void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, 
     DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, RED); // Faz o texto dentro do botão
 }
 
-void exibeFase(int fase){
-/* Essa função exibe no canto da tela a fase atual */
-    DrawText(TextFormat("Fase atual: %d", fase+1), LARGURA - (MeasureText("Fase atual: 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior){
+    *tempoAtual=GetTime();
+    if ((*tempoAtual - *tempoAnterior) > TEMP_PARA_REDUZIR_PONTOS){
+        *pontos-=QTD_REDUZIR_PONTOS;
+        *tempoAnterior=*tempoAtual;
+    }
 }
+
