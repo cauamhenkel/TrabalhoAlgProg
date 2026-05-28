@@ -14,8 +14,7 @@ int main(){
     /* Variáveis gerais */
     EstadoJogo estado = MENU; // Variável usada para verificar o estado do jogo, começa no menu
     int sair=0;               // Flag usada para fechar o jogo
-    int pontos;
-    TIPO_PLACAR placar[10];
+
     /* Variaveis para padronizar a posicao dos botoes em menus: */
     int posBotao1 = COMP_COLUNA * 10,
         posBotao2 = posBotao1 + (COMP_COLUNA * 5),
@@ -23,6 +22,7 @@ int main(){
 
     /* Variáveis do menu */
     EstadoMenu opcaoMenu = MENU_JOGAR;
+
     /* Variáveis do pause */
     EstadoPausado opcaoPause = PAUSE_CONTINUAR;
 
@@ -34,6 +34,11 @@ int main(){
     PLAYER p;                        // Variável com todas as informações do player
     MONSTRO monstros[M_QTD_MAX]={};  // Vetor com todos as informações de todos os monstros
     PROJETIL pr;
+
+    /* Variáveis para os pontos */
+    int pontos;
+    TIPO_PLACAR placar[10];
+    float tempoAtual, tempoAnterior;
 
     /* Início do código */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
@@ -61,10 +66,13 @@ int main(){
                 switch(opcaoMenu){
                     case MENU_JOGAR:
                         if (IsKeyPressed(KEY_ENTER)){
+                            // Coisas que precisam ser iniciadas todo inicio de jogo (e não inicio de fase)
                             estado = EM_JOGO;
                             iniciouFase=0;
                             fase=0;
                             p.saude=P_VIDA_MAX;
+                            pontos=5000;
+                            tempoAnterior=0;
                         }
                         break;
                     case MENU_RANKING:
@@ -115,15 +123,17 @@ int main(){
                 break;
 
             case VITORIA:
-                if (IsKeyPressed(KEY_ENTER))
+                if (IsKeyPressed(KEY_ENTER)){
                     estado = MENU;
                     opcaoMenu=MENU_JOGAR;
+                }
                 break;
 
             case DERROTA:
-                if (IsKeyPressed(KEY_ENTER))
+                if (IsKeyPressed(KEY_ENTER)){
                     estado = MENU;
                     opcaoMenu=MENU_JOGAR;
+                }
                 break;
 
             case EM_JOGO:
@@ -140,6 +150,9 @@ int main(){
                     estado = PAUSADO;
                     opcaoPause = PAUSE_CONTINUAR;
                 }
+
+                /* Pontos */
+                reduzPontos(&pontos, &tempoAtual, &tempoAnterior);
 
                 /* MOVIMENTACAO MONSTROS */
                 regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
@@ -175,7 +188,7 @@ int main(){
                 if (p.cooldown>0){
                     p.cooldown--;
                 }
-                mataMonstrosProjetil(&pr, monstros, qtdMonstros);
+                mataMonstrosProjetil(&pr, monstros, qtdMonstros, &pontos);
 
                 if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
                     // Caso o player ocorra de subir demais a escada
@@ -185,6 +198,7 @@ int main(){
 
                 if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
                     danoPlayer(&p);
+                    pontos-=1000;
                 }
                 if (p.invencibilidade > 0){
                     p.invencibilidade--;
@@ -241,9 +255,7 @@ int main(){
                     desenhaPlayer(p, sprites.player);
                     desenhaMonstros(monstros, qtdMonstros, sprites.monstro);
                     desenhaProjetil(pr);
-                    exibeSaude(p);
-                    exibeQtdTiros(p);
-                    exibeFase(fase);
+                    exibeCabecalho(p, fase, pontos);
                     break;
             }
     	EndDrawing();
@@ -258,3 +270,4 @@ int main(){
 // Menu de ranking
 // Pontos ou tempo (na estrutura player)
 // Placar (usar uma struct de placar definida pelo professor)
+// Talvez arrumar o tiro (eu acho que a bala vai tão rapido que junto com o movimento do monstro ela consegue atravessar)
