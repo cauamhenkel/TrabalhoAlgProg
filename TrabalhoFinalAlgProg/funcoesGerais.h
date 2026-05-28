@@ -24,6 +24,9 @@
 #define FONTE_BOTOES (COMP_LINHA)
 #define FONTE_CABECALHO (FONTE_BOTOES * 1.3)
 
+#define TEMP_PARA_REDUZIR_PONTOS 2
+#define QTD_REDUZIR_PONTOS 200
+
 /* CONSTANTES FISICAS */
 #define GRAVIDADE (COMP_COLUNA / 22.0f) // Define a aceleracao gravitacional
 #define FORCA_ATRITO (P_ACC_X / 1.5f) // Define a forca de atrito
@@ -80,6 +83,6 @@ typedef struct tipo_placar{
 void criaMapa(char mapa[TILES][TILES], int fase, EstadoJogo *estado);
 void corrigeMapa(char mapa[TILES][TILES]);
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]);
-void exibeFase(int fase);
+void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior);
 
 #endif
