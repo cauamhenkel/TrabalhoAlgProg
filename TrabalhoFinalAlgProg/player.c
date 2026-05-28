@@ -29,14 +29,6 @@ void desenhaPlayer(PLAYER p, Texture2D sprite){
         DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE); // Funcao escala automaticamente o retangulo da fonte para o do destino
 }
 
-void exibeSaude(PLAYER p) {
-    DrawText(TextFormat("Saude: %d", p.saude), COMP_COLUNA/2, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
-}
-
-void exibeQtdTiros(PLAYER p){
-    DrawText(TextFormat("Tiros restantes: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
-}
-
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]) {
     if (p->naEscada || playerNoChao(*p, mapa) || playerNaPlataforma(*p, mapa)) {
         p->afetadoGravidade = 0;
