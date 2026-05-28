@@ -15,8 +15,6 @@ typedef struct{
 
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void desenhaPlayer(PLAYER p, Texture2D sprite);
-void exibeSaude(PLAYER p);
-void exibeQtdTiros(PLAYER p);
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaGravidadePlayer(PLAYER *p);
 void processaAceleracaoPlayer(PLAYER *p);
