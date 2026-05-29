@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* CONSTANTES GERIAS */
+/* CONSTANTES GERAIS */
 #define FPS 60
 
 #define TILES 30
@@ -39,10 +39,14 @@
 #define P_VEL_PULO -(COMP_COLUNA/2)
 #define P_VIDA_MAX 3
 #define P_QTD_TIROS 100
+#define P_COOLDOWN_TIRO FPS
 
 /* CONSTANTES MONSTRO */
 #define M_QTD_MAX 20
 #define M_VEL_X (COMP_LINHA/8)
+
+/* CONSTANTES PROJETIL*/
+#define PROJ_VEL_X COMP_LINHA*0.75
 
 typedef enum{
     MENU,
