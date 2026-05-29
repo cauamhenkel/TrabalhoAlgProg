@@ -50,4 +50,3 @@ void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior){
         *tempoAnterior=*tempoAtual;
     }
 }
-
