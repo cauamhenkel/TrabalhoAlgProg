@@ -2,14 +2,13 @@
 
 void criaProjetil(PLAYER p, PROJETIL *pr){
     pr->estado=ATIVO;
+    pr->posY=p.posY+COMP_COLUNA/2;
     if (p.dir==DIREITA){
         pr->posX=p.posX+COMP_LINHA;
-        pr->posY=p.posY;
         pr->velX=PROJ_VEL_X;
     }
     else{
         pr->posX=p.posX-COMP_LINHA/5; // Por algum motivo precisa de mais do que 1 pixel pra sair de dentro do player na esquerda
-        pr->posY=p.posY;
         pr->velX=-PROJ_VEL_X;
     }
 }
@@ -31,11 +30,20 @@ void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char ma
     }
 }
 
-void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
+void mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
+    int poXPr=pr->posX/COMP_LINHA;
+    int posYPr=pr->posY/COMP_COLUNA;
+    int posXMonstroEsq, posXMonstroDir;
+    int posYMonstro;
     for (int i=0 ; i<qtdMonstros ; i++){
-        if ((pr->posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (pr->posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO){
+        posXMonstroEsq=monstros[i].posX/COMP_LINHA;
+        posXMonstroDir=(monstros[i].posX+COMP_LINHA)/COMP_LINHA;
+        posYMonstro=monstros[i].posY/COMP_COLUNA;
+
+        if ((poXPr==posXMonstroEsq || poXPr==posXMonstroDir) && posYPr==posYMonstro && monstros[i].estadoMonstro==ATIVO && pr->estado==ATIVO){
             monstros[i].estadoMonstro=DESATIVADO;
             pr->estado=DESATIVADO;
+            p->qtdTiros++;
             *pontos+=500;
         }
     }
@@ -43,6 +51,6 @@ void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, i
 
 void desenhaProjetil(PROJETIL pr){
     if (pr.estado==ATIVO)
-        DrawRectangle(pr.posX, pr.posY+(COMP_COLUNA*2), COMP_LINHA/5, COMP_COLUNA/5, WHITE);
+        DrawRectangle(pr.posX, pr.posY+(COMP_COLUNA*1.5), COMP_LINHA/5, COMP_COLUNA/5, WHITE);
         // Por algum motivo precisa desenhar mais pra baixo a posição do tiro, senão ele sai voando
 }
