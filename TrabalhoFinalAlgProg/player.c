@@ -16,7 +16,7 @@ void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
     p->invencibilidade=0;
     p->naEscada=0;
     p->qtdTiros=P_QTD_TIROS;
-    p->cooldown=0;
+    p->cooldownTiro=0;
 }
 
 void desenhaPlayer(PLAYER p, Texture2D sprite){
