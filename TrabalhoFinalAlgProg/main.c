@@ -173,9 +173,9 @@ int main(){
                 processaColisoesPlayer(&p, mapa);
 
                 /* PROJETIL */
-                if (IsKeyPressed(KEY_K) && !p.naEscada && p.qtdTiros>0 && p.cooldown==0){
+                if (IsKeyPressed(KEY_K) && !p.naEscada && p.qtdTiros>0 && p.cooldownTiro==0){
                     criaProjetil(p, &pr);
-                    p.cooldown=FPS;
+                    p.cooldownTiro=P_COOLDOWN_TIRO;
 
                     if (p.qtdTiros>0){
                         p.qtdTiros--;
@@ -185,10 +185,10 @@ int main(){
                     moveProjetil(&pr);
                     processaColisoesProjetil(&pr, monstros, mapa);
                 }
-                if (p.cooldown>0){
-                    p.cooldown--;
+                if (p.cooldownTiro>0){
+                    p.cooldownTiro--;
                 }
-                mataMonstrosProjetil(&pr, monstros, qtdMonstros, &pontos);
+                mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
 
                 if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
                     // Caso o player ocorra de subir demais a escada
@@ -268,6 +268,4 @@ int main(){
 
 /* Coisas a fazer*/
 // Menu de ranking
-// Pontos ou tempo (na estrutura player)
 // Placar (usar uma struct de placar definida pelo professor)
-// Talvez arrumar o tiro (eu acho que a bala vai tão rapido que junto com o movimento do monstro ela consegue atravessar)
