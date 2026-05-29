@@ -5,8 +5,6 @@
 #include "player.h"
 #include "monstro.h"
 
-#define PROJ_VEL_X COMP_LINHA
-
 typedef struct{
     int posX; float velX;
     int posY;
@@ -16,7 +14,7 @@ typedef struct{
 void criaProjetil(PLAYER p, PROJETIL *pr);
 void moveProjetil(PROJETIL *pr);
 void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES]);
-void mataMonstrosProjetil(PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros);
+void mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos);
 void desenhaProjetil(PROJETIL pr);
 
 #endif
