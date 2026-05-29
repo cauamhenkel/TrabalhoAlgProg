@@ -10,7 +10,7 @@ typedef struct{
     Direcao dir;
     int saude, invencibilidade;
     int naEscada, afetadoGravidade;
-    int qtdTiros, cooldown;
+    int qtdTiros, cooldownTiro;
 } PLAYER;
 
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
