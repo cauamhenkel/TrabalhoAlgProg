@@ -22,17 +22,17 @@ void salvaPlacar(TIPO_PLACAR placar[TAM_PLACAR]){
 }
 
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]){
-/* Essa funÁ„o desenha um bot„o com as bordas arredondadas e um texto no centro */
-    Rectangle retanguloBase = {posX, posY, largura, altura};             // Salva as dimensıes e posiÁ„o do retangulo de entrada
-    Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};  // Cria um retangulo com proporÁıes ajustadas
+/* Essa fun√ß√£o desenha um bot√£o com as bordas arredondadas e um texto no centro */
+    Rectangle retanguloBase = {posX, posY, largura, altura};             // Salva as dimens√µes e posi√ß√£o do retangulo de entrada
+    Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};  // Cria um retangulo com propor√ß√µes ajustadas
     DrawRectangleRounded(retanguloBorda, 0.4, 6, corBorda);              // Desenha a borda do retangulo
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);              // Desenha o retangulo
-    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, RED); // Faz o texto dentro do bot„o
+    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, RED); // Faz o texto dentro do bot√£o
 }
 
 void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar){
-    Rectangle retanguloBase = {posX, posY, largura, altura};             // Salva as dimensıes e posiÁ„o do retangulo de entrada
-    Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};  // Cria um retangulo com proporÁıes ajustadas
+    Rectangle retanguloBase = {posX, posY, largura, altura};             // Salva as dimens√µes e posi√ß√£o do retangulo de entrada
+    Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};  // Cria um retangulo com propor√ß√µes ajustadas
     DrawRectangleRounded(retanguloBorda, 0.4, 6, corBorda);              // Desenha a borda do retangulo
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);              // Desenha o retangulo
     if (placar.nome[0]=='\0'){
@@ -83,8 +83,7 @@ void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1]){
     DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), CABECALHO*3, FONTE_CABECALHO, GREEN);
     DrawText("Digite seu nome:", (LARGURA/2) - (MeasureText("Digite seu nome:", FONTE_CABECALHO)/2), ALTURA/2, FONTE_CABECALHO, WHITE);
     DrawRectangle(COMP_LINHA*2, (ALTURA+CABECALHO*2)/2, LARGURA-4*COMP_LINHA, COMP_COLUNA*2, WHITE);
-    DrawText(TextFormat("%s",nomeTemp), COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
-    DrawText(TextFormat("|",nomeTemp), (COMP_LINHA*2.5)+MeasureText(TextFormat("%s",nomeTemp), FONTE_CABECALHO), ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
+    DrawText(TextFormat("%s|",nomeTemp), COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
 }
 
 void desenhaTextoDerrota(void){
@@ -93,21 +92,21 @@ void desenhaTextoDerrota(void){
 }
 
 void criaMapa(char mapa[TILES][TILES], int fase){
-/* Essa funÁ„o recebe um n˙mero de fase e transforma o arquivo .txt formatado dessa fase para ser um mapa em uma matriz 30 por 30 */
-/* Se passar da ultima fase (n„o tem mais nenhum arquivo para ler) d· a vitÛria */
+/* Essa fun√ß√£o recebe um n√∫mero de fase e transforma o arquivo .txt formatado dessa fase para ser um mapa em uma matriz 30 por 30 */
+/* Se passar da ultima fase (n√£o tem mais nenhum arquivo para ler) d√° a vit√≥ria */
     FILE *leitura;                                    // Ponteiro usado para ler o arquivo
-    char nomeArquivo[50];                             // Vari·vel para salvar momentaneamente o nome do arquivo
-    char ch;                                          // Vari·vel para salvar momentaneamente o caractere lido do arquivo
+    char nomeArquivo[50];                             // Vari√°vel para salvar momentaneamente o nome do arquivo
+    char ch;                                          // Vari√°vel para salvar momentaneamente o caractere lido do arquivo
 
-    sprintf(nomeArquivo, "assets/levels/mapa%d.txt", fase);         // Salva o nome do arquivo que ser· aberto com base no n˙mero da fase de entrada
+    sprintf(nomeArquivo, "assets/levels/mapa%d.txt", fase);         // Salva o nome do arquivo que ser√° aberto com base no n√∫mero da fase de entrada
 
     leitura = fopen(nomeArquivo, "r");
 
     for (int i=0 ; i<TILES ; i++){
         for (int j=0 ; j<TILES ; j++){
-            ch=fgetc(leitura);                    // LÍ o caractere do arquivo
-            while (ch=='\n' || ch=='\r')          // Se o caractere lido for algum de formataÁ„o (como enter)
-                ch=fgetc(leitura);                // Ignora e pega o prÛximo caractere, fica em loop atÈ achar um caractere normal
+            ch=fgetc(leitura);                    // L√™ o caractere do arquivo
+            while (ch=='\n' || ch=='\r')          // Se o caractere lido for algum de formata√ß√£o (como enter)
+                ch=fgetc(leitura);                // Ignora e pega o pr√≥ximo caractere, fica em loop at√© achar um caractere normal
             mapa[i][j]=ch;                        // Salva o caractere na matriz
         }
     }
@@ -175,9 +174,9 @@ void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]){
 
 int vitoria(char mapa[TILES][TILES], int fase){
     FILE *leitura;                                    // Ponteiro usado para ler o arquivo
-    char nomeArquivo[50];                             // Vari·vel para salvar momentaneamente o nome do arquivo
+    char nomeArquivo[50];                             // Vari√°vel para salvar momentaneamente o nome do arquivo
 
-    sprintf(nomeArquivo, "assets/levels/mapa%d.txt", fase);         // Salva o nome do arquivo que ser· aberto com base no n˙mero da fase de entrada
+    sprintf(nomeArquivo, "assets/levels/mapa%d.txt", fase);         // Salva o nome do arquivo que ser√° aberto com base no n√∫mero da fase de entrada
 
     if ((leitura = fopen(nomeArquivo, "r")) == NULL){ // Abre o arquivo de entrada no ponteiro e se a leitura der errado (passou todos os mapas)
         fclose(leitura);
