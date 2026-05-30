@@ -11,26 +11,26 @@
 
 int main(){
 
-    /* Variáveis gerais */
-    EstadoJogo estado = MENU; // Variável usada para verificar o estado do jogo, começa no menu
+    /* VariÃ¡veis gerais */
+    EstadoJogo estado = MENU; // VariÃ¡vel usada para verificar o estado do jogo, comeÃ§a no menu
     int sair=0;               // Flag usada para fechar o jogo
 
-    /* Variáveis do menu */
+    /* VariÃ¡veis do menu */
     EstadoMenu opcaoMenu = MENU_JOGAR;
 
-    /* Variáveis do pause */
+    /* VariÃ¡veis do pause */
     EstadoPausado opcaoPause = PAUSE_CONTINUAR;
 
-    /* Variáveis do jogo */
+    /* VariÃ¡veis do jogo */
     char mapa[TILES][TILES];         // Matriz do mapa
     int fase;                        // Fase no momento
     int qtdMonstros=0;               // Quantidade de monstros
     int iniciouFase=0;               // Flag para iniciar apenas uma vez
-    PLAYER p;                        // Variável com todas as informações do player
-    MONSTRO monstros[M_QTD_MAX]={};  // Vetor com todos as informações de todos os monstros
+    PLAYER p;                        // VariÃ¡vel com todas as informaÃ§Ãµes do player
+    MONSTRO monstros[M_QTD_MAX]={};  // Vetor com todos as informaÃ§Ãµes de todos os monstros
     PROJETIL pr;
 
-    /* Variáveis para os pontos, vitória e ranking */
+    /* VariÃ¡veis para os pontos, vitÃ³ria e ranking */
     TIPO_PLACAR placar[TAM_PLACAR]={};
     int pontos;
     float tempoAtual, tempoAnterior;
@@ -38,7 +38,7 @@ int main(){
     char caractereLido;
     int posCaractereAtual;
 
-    /* Início do código */
+    /* InÃ­cio do cÃ³digo */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
     SetTargetFPS(FPS);
     HideCursor();
@@ -66,7 +66,7 @@ int main(){
                 switch(opcaoMenu){
                     case MENU_JOGAR:
                         if (IsKeyPressed(KEY_ENTER)){
-                            // Coisas que precisam ser iniciadas todo inicio de jogo (e não inicio de fase)
+                            // Coisas que precisam ser iniciadas todo inicio de jogo (e nÃ£o inicio de fase)
                             estado = EM_JOGO;
                             iniciouFase=0;
                             fase=0;
@@ -123,7 +123,7 @@ int main(){
                 break;
 
             case VITORIA:
-                if (posCaractereAtual!=(TAM_NOME_RANKING)){
+                if (posCaractereAtual!=TAM_NOME_RANKING-1){
                     caractereLido=GetCharPressed();
                     if (caractereLido>=32 && caractereLido<=126){
                         nomeTemp[posCaractereAtual]=caractereLido;
@@ -136,7 +136,7 @@ int main(){
                         posCaractereAtual--;
                     }
                 }
-                if (IsKeyPressed(KEY_ENTER)){
+                if (IsKeyPressed(KEY_ENTER) && strlen(nomeTemp)>0){
                     colocaNoPlacar(placar, nomeTemp, pontos);
                     ordenarPlacar(placar);
                     estado = MENU;
