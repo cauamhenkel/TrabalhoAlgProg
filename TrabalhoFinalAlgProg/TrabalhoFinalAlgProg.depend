@@ -1,0 +1,55 @@
+# depslib dependency file v1.0
+1780149398 source:c:\programas\trabalhos\trabalhofinalalgprog\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"raylib.h"
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+	"graficos.h"
+	"extras.h"
+
+1778539681 c:\raylib-1\include\raylib.h
+	<stdarg.h>
+	<stdbool.h>
+
+1780149770 source:c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.c
+	"funcoesGerais.h"
+
+1780149199 c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.h
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1779280377 source:c:\programas\trabalhos\trabalhofinalalgprog\testes.c
+
+1779969338 source:c:\programas\trabalhos\trabalhofinalalgprog\player.c
+	"player.h"
+
+1779969333 c:\programas\trabalhos\trabalhofinalalgprog\player.h
+	"funcoesGerais.h"
+	"monstro.h"
+
+1779916613 source:c:\programas\trabalhos\trabalhofinalalgprog\monstro.c
+	"monstro.h"
+
+1779916464 c:\programas\trabalhos\trabalhofinalalgprog\monstro.h
+	"funcoesGerais.h"
+
+1779919121 source:c:\programas\trabalhos\trabalhofinalalgprog\graficos.c
+	"graficos.h"
+
+1780090200 c:\programas\trabalhos\trabalhofinalalgprog\graficos.h
+	"funcoesGerais.h"
+	"player.h"
+
+1780016811 source:c:\programas\trabalhos\trabalhofinalalgprog\extras.c
+	"extras.h"
+
+1779969505 c:\programas\trabalhos\trabalhofinalalgprog\extras.h
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+
