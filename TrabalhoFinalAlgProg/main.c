@@ -194,21 +194,7 @@ int main(){
                     processaColisoesPlayer(&p, mapa);
 
                     /* PROJETIL */
-                    if (IsKeyPressed(KEY_K) && !p.naEscada && p.qtdTiros>0 && p.cooldownTiro==0){
-                        criaProjetil(p, &pr);
-                        p.cooldownTiro=P_COOLDOWN_TIRO;
-
-                        if (p.qtdTiros>0){
-                            p.qtdTiros--;
-                        }
-                    }
-                    if (pr.estado==ATIVO){
-                        moveProjetil(&pr);
-                        processaColisoesProjetil(&pr, monstros, mapa);
-                    }
-                    if (p.cooldownTiro>0){
-                        p.cooldownTiro--;
-                    }
+                    processaProjetil(&p, &pr, mapa);
                     mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
 
                     if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
