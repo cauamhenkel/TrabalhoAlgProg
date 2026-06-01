@@ -33,10 +33,11 @@ int main(){
     /* Variáveis para os pontos, vitória e ranking */
     TIPO_PLACAR placar[TAM_PLACAR]={};
     int pontos;
-    float tempoAtual, tempoAnterior;
+    int framesReduzirPontos;
     char nomeTemp[TAM_NOME_RANKING+1]={};
     char caractereLido;
     int posCaractereAtual;
+    int piscando;
 
     /* Início do código */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
@@ -72,7 +73,7 @@ int main(){
                             fase=0;
                             p.saude=P_VIDA_MAX;
                             pontos=5000;
-                            tempoAnterior=GetTime();
+                            framesReduzirPontos=0;
                         }
                         break;
                     case MENU_RANKING:
@@ -156,6 +157,7 @@ int main(){
                     estado=VITORIA;
                     reiniciaNome(nomeTemp);
                     posCaractereAtual=0;
+                    piscando=0;
                 }
                 else{
                     if (!iniciouFase){
@@ -173,7 +175,7 @@ int main(){
                     }
 
                     /* Pontos */
-                    reduzPontos(&pontos, &tempoAtual, &tempoAnterior);
+                    reduzPontos(&pontos, &framesReduzirPontos);
 
                     /* MOVIMENTACAO MONSTROS */
                     regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
@@ -240,7 +242,7 @@ int main(){
 
                 case VITORIA:
                     ClearBackground(BLACK);
-                    desenhaTextoVitoria(pontos, nomeTemp);
+                    desenhaTextoVitoria(pontos, nomeTemp, &piscando);
                     break;
 
                 case DERROTA:
