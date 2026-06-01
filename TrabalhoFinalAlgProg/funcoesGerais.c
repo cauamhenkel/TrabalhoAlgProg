@@ -78,12 +78,14 @@ void desenhaTextoPause(EstadoPausado opcaoPause){
     desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
 }
 
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1]){
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando){
     DrawText("Voce venceu!", (LARGURA/2) - (MeasureText("Voce venceu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, GREEN);
     DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), CABECALHO*3, FONTE_CABECALHO, GREEN);
     DrawText("Digite seu nome:", (LARGURA/2) - (MeasureText("Digite seu nome:", FONTE_CABECALHO)/2), ALTURA/2, FONTE_CABECALHO, WHITE);
     DrawRectangle(COMP_LINHA*2, (ALTURA+CABECALHO*2)/2, LARGURA-4*COMP_LINHA, COMP_COLUNA*2, WHITE);
-    DrawText(TextFormat("%s|",nomeTemp), COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
+    DrawText(TextFormat("%s",nomeTemp), COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
+    DrawText(TextFormat(" |"), MeasureText(TextFormat("%s", nomeTemp), FONTE_CABECALHO)+COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, (*piscando % (FPS*2)) > (FPS) ? WHITE : BLACK);
+    (*piscando)++;
 }
 
 void desenhaTextoDerrota(void){
@@ -122,17 +124,17 @@ void corrigeMapa(char mapa[TILES][TILES]){
     }
 }
 
-void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior){
-    *tempoAtual=GetTime();
-    if ((*tempoAtual - *tempoAnterior) > TEMP_PARA_REDUZIR_PONTOS){
+void reduzPontos(int *pontos, int *framesReduzirPontos){
+    if (*framesReduzirPontos > FRAMES_PARA_REDUZIR_PONTOS){
         if (*pontos>100){
             *pontos-=QTD_REDUZIR_PONTOS;
-            *tempoAnterior=*tempoAtual;
+            *framesReduzirPontos=0;
         }
         if (*pontos<100){
             *pontos=100;
         }
     }
+    (*framesReduzirPontos)++;
 }
 
 void reiniciaNome(char nomeTemp[TAM_NOME_RANKING]){
