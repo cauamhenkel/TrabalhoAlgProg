@@ -29,7 +29,7 @@
 
 #define TAM_NOME_RANKING 20
 #define TAM_PLACAR 10
-#define TEMP_PARA_REDUZIR_PONTOS 2
+#define FRAMES_PARA_REDUZIR_PONTOS FPS*2
 #define QTD_REDUZIR_PONTOS 200
 
 /* CONSTANTES FISICAS */
@@ -43,7 +43,7 @@
 #define P_VEL_ESCADA (COMP_COLUNA/5)
 #define P_VEL_PULO -(COMP_COLUNA/2)
 #define P_VIDA_MAX 3
-#define P_QTD_TIROS 100
+#define P_QTD_TIROS 1
 #define P_COOLDOWN_TIRO FPS
 
 /* CONSTANTES MONSTRO */
@@ -98,12 +98,12 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
 void desenhaTextoMenu(EstadoMenu opcaoMenu);
 void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]);
 void desenhaTextoPause(EstadoPausado opcaoPause);
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING]);
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando);
 void desenhaTextoDerrota(void);
 
 void criaMapa(char mapa[TILES][TILES], int fase);
 void corrigeMapa(char mapa[TILES][TILES]);
-void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior);
+void reduzPontos(int *pontos, int *framesReduzirPontos);
 void reiniciaNome(char nomeTemp[TAM_NOME_RANKING]);
 void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos);
 void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
