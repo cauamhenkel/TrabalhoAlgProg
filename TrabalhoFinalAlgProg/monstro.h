@@ -6,6 +6,7 @@
 typedef struct{
     int posX, velX;
     int posY;
+    Direcao dir;
     EstadoObjeto estadoMonstro;
 } MONSTRO;
 

@@ -10,8 +10,8 @@
 #define FPS 60
 
 #define TILES 30
-#define COMP_LINHA 20
-#define COMP_COLUNA 20
+#define COMP_LINHA 28
+#define COMP_COLUNA 28
 
 #define LARGURA (COMP_LINHA*TILES) // Define a largura da tela
 #define ALTURA (COMP_COLUNA*TILES) // Define a altura da tela
