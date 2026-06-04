@@ -184,10 +184,16 @@ int colidiuBordaDireita(PLAYER p){
 
 int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros){
     int colidiu=0;
+    int posXEsq=p.posX/COMP_LINHA;
+    int posXDir=(p.posX+COMP_LINHA-1)/COMP_LINHA;
+    int posY=p.posY/COMP_COLUNA;
+    int posXEsqMonstro, posXDirMonstro, posYMonstro;
+
     for (int i=0 ; i<qtdMonstros ; i++){
-        if ((p.posX/COMP_LINHA==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO)
-            colidiu=1;
-        else if (((p.posX/COMP_LINHA)+1==monstros[i].posX/COMP_LINHA) && (p.posY/COMP_COLUNA==monstros[i].posY/COMP_COLUNA) && monstros[i].estadoMonstro==ATIVO)
+        posXEsqMonstro=monstros[i].posX/COMP_LINHA;
+        posXDirMonstro=(monstros[i].posX+COMP_LINHA-1)/COMP_LINHA;
+        posYMonstro=monstros[i].posY/COMP_COLUNA;
+        if ((monstros[i].estadoMonstro==ATIVO) && (posY==posYMonstro) && ((posXDir==posXDirMonstro) || (posXEsq==posXDirMonstro) || (posXDir==posXEsqMonstro) || (posXEsq==posXEsqMonstro)))
             colidiu=1;
     }
     return colidiu;

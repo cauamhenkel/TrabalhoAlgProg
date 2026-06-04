@@ -6,7 +6,7 @@
 
 #define TAM_TILE 32
 
-typedef struct {
+typedef struct{
     Texture2D player;
     Texture2D monstro;
     Texture2D tileset;

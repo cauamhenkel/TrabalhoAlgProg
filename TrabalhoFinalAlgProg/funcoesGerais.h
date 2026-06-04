@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* CONSTANTES GERAIS */
+/* CONSTANTES GERIAS */
 #define FPS 60
 
 #define TILES 30
@@ -19,12 +19,17 @@
 
 #define LARG_BOTOES (COMP_LINHA*8)
 #define ALT_BOTOES (COMP_COLUNA*3)
+#define LARG_BOTOES_RANKING LARG_BOTOES
+#define ALT_BOTOES_RANKING ALT_BOTOES*0.75
 
 #define FONTE_GERAL (COMP_LINHA*3)
 #define FONTE_BOTOES (COMP_LINHA)
+#define FONTE_RANKING (COMP_LINHA/2)
 #define FONTE_CABECALHO (FONTE_BOTOES * 1.3)
 
-#define TEMP_PARA_REDUZIR_PONTOS 2
+#define TAM_NOME_RANKING 20
+#define TAM_PLACAR 10
+#define FRAMES_PARA_REDUZIR_PONTOS FPS*2
 #define QTD_REDUZIR_PONTOS 200
 
 /* CONSTANTES FISICAS */
@@ -38,7 +43,7 @@
 #define P_VEL_ESCADA (COMP_COLUNA/5)
 #define P_VEL_PULO -(COMP_COLUNA/2)
 #define P_VIDA_MAX 3
-#define P_QTD_TIROS 100
+#define P_QTD_TIROS 1
 #define P_COOLDOWN_TIRO FPS
 
 /* CONSTANTES MONSTRO */
@@ -80,13 +85,29 @@ typedef enum{
 } EstadoObjeto;
 
 typedef struct tipo_placar{
-    char nome[20];
+    char nome[TAM_NOME_RANKING];
     int pontos;
 } TIPO_PLACAR;
 
-void criaMapa(char mapa[TILES][TILES], int fase, EstadoJogo *estado);
-void corrigeMapa(char mapa[TILES][TILES]);
+void lePlacar(TIPO_PLACAR placar[TAM_PLACAR]);
+void salvaPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
+
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]);
-void reduzPontos(int *pontos, float *tempoAtual, float *tempoAnterior);
+void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar);
+
+void desenhaTextoMenu(EstadoMenu opcaoMenu);
+void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]);
+void desenhaTextoPause(EstadoPausado opcaoPause);
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando);
+void desenhaTextoDerrota(void);
+
+void criaMapa(char mapa[TILES][TILES], int fase);
+void corrigeMapa(char mapa[TILES][TILES]);
+void reduzPontos(int *pontos, int *framesReduzirPontos);
+void reiniciaNome(char nomeTemp[TAM_NOME_RANKING]);
+void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos);
+void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
+
+int vitoria(char mapa[TILES][TILES], int fase);
 
 #endif

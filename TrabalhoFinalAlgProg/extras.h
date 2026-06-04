@@ -13,7 +13,8 @@ typedef struct{
 
 void criaProjetil(PLAYER p, PROJETIL *pr);
 void moveProjetil(PROJETIL *pr);
-void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES]);
+void processaColisoesProjetil(PROJETIL *pr, char mapa[TILES][TILES]);
+void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES]);
 void mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos);
 void desenhaProjetil(PROJETIL pr);
 

@@ -18,7 +18,7 @@ void moveProjetil(PROJETIL *pr){
         pr->posX+=pr->velX;
 }
 
-void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES]){
+void processaColisoesProjetil(PROJETIL *pr, char mapa[TILES][TILES]){
     int posXGrid=(pr->posX)/COMP_LINHA;
     int posYGrid=(pr->posY)/COMP_COLUNA;
 
@@ -27,6 +27,24 @@ void processaColisoesProjetil(PROJETIL *pr, MONSTRO monstros[M_QTD_MAX], char ma
     }
     if (mapa[posYGrid][posXGrid]=='Z'){
         pr->estado=DESATIVADO;
+    }
+}
+
+void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES]){
+    if (IsKeyPressed(KEY_K) && !p->naEscada && p->qtdTiros>0 && p->cooldownTiro==0){
+        criaProjetil(*p, pr);
+        p->cooldownTiro=P_COOLDOWN_TIRO;
+
+        if (p->qtdTiros>0){
+            p->qtdTiros--;
+        }
+    }
+    if (pr->estado==ATIVO){
+        moveProjetil(pr);
+        processaColisoesProjetil(pr, mapa);
+    }
+    if (p->cooldownTiro>0){
+        p->cooldownTiro--;
     }
 }
 

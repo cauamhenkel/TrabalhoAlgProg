@@ -15,11 +15,6 @@ int main(){
     EstadoJogo estado = MENU; // Variável usada para verificar o estado do jogo, começa no menu
     int sair=0;               // Flag usada para fechar o jogo
 
-    /* Variaveis para padronizar a posicao dos botoes em menus: */
-    int posBotao1 = COMP_COLUNA * 10,
-        posBotao2 = posBotao1 + (COMP_COLUNA * 5),
-        posBotao3 = posBotao2 + (COMP_COLUNA * 5);
-
     /* Variáveis do menu */
     EstadoMenu opcaoMenu = MENU_JOGAR;
 
@@ -35,10 +30,14 @@ int main(){
     MONSTRO monstros[M_QTD_MAX]={};  // Vetor com todos as informações de todos os monstros
     PROJETIL pr;
 
-    /* Variáveis para os pontos */
+    /* Variáveis para os pontos, vitória e ranking */
+    TIPO_PLACAR placar[TAM_PLACAR]={};
     int pontos;
-    TIPO_PLACAR placar[10];
-    float tempoAtual, tempoAnterior;
+    int framesReduzirPontos;
+    char nomeTemp[TAM_NOME_RANKING+1]={};
+    char caractereLido;
+    int posCaractereAtual;
+    int piscando;
 
     /* Início do código */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
@@ -47,6 +46,8 @@ int main(){
     /* SPRITES */
     Spritesheet sprites;
     carregaSpritesheet(&sprites);
+    /* Carrega o placar */
+    lePlacar(placar);
 
     while (!WindowShouldClose() && !sair) {
         switch (estado){
@@ -72,7 +73,7 @@ int main(){
                             fase=0;
                             p.saude=P_VIDA_MAX;
                             pontos=5000;
-                            tempoAnterior=0;
+                            framesReduzirPontos=0;
                         }
                         break;
                     case MENU_RANKING:
@@ -123,7 +124,22 @@ int main(){
                 break;
 
             case VITORIA:
-                if (IsKeyPressed(KEY_ENTER)){
+                if (posCaractereAtual!=TAM_NOME_RANKING-1){
+                    caractereLido=GetCharPressed();
+                    if (caractereLido>=32 && caractereLido<=126){
+                        nomeTemp[posCaractereAtual]=caractereLido;
+                        posCaractereAtual++;
+                    }
+                }
+                if (posCaractereAtual>0){
+                    if (IsKeyPressed(KEY_BACKSPACE)){
+                        nomeTemp[posCaractereAtual-1]='\0';
+                        posCaractereAtual--;
+                    }
+                }
+                if (IsKeyPressed(KEY_ENTER) && strlen(nomeTemp)>0){
+                    colocaNoPlacar(placar, nomeTemp, pontos);
+                    ordenarPlacar(placar);
                     estado = MENU;
                     opcaoMenu=MENU_JOGAR;
                 }
@@ -137,78 +153,72 @@ int main(){
                 break;
 
             case EM_JOGO:
-                if (!iniciouFase){
-                    criaMapa(mapa, fase, &estado);
-                    corrigeMapa(mapa);
-                    iniciaPlayer(&p, mapa);
-                    iniciaMonstros(monstros, mapa, &qtdMonstros);
-                    pr.estado=DESATIVADO;
-                    iniciouFase=1;
+                if (vitoria(mapa, fase)){
+                    estado=VITORIA;
+                    reiniciaNome(nomeTemp);
+                    posCaractereAtual=0;
+                    piscando=0;
                 }
-
-                if (IsKeyPressed(KEY_TAB)) {
-                    estado = PAUSADO;
-                    opcaoPause = PAUSE_CONTINUAR;
-                }
-
-                /* Pontos */
-                reduzPontos(&pontos, &tempoAtual, &tempoAnterior);
-
-                /* MOVIMENTACAO MONSTROS */
-                regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
-                moveMonstros(monstros, qtdMonstros);
-
-                /* MOVIMENTACAO PLAYER */
-                processaMovimentoPlayer(&p, mapa);
-                processaPlayerNaEscada(&p, mapa);
-                processaPuloPlayer(&p, mapa);
-
-                /* FISICA PLAYER */
-                controlaGravidadePlayer(&p, mapa);
-                processaGravidadePlayer(&p);
-                processaAceleracaoPlayer(&p);
-                processaAtritoPlayer(&p);
-
-                /* COLISOES PLAYER */
-                processaColisoesPlayer(&p, mapa);
-
-                /* PROJETIL */
-                if (IsKeyPressed(KEY_K) && !p.naEscada && p.qtdTiros>0 && p.cooldownTiro==0){
-                    criaProjetil(p, &pr);
-                    p.cooldownTiro=P_COOLDOWN_TIRO;
-
-                    if (p.qtdTiros>0){
-                        p.qtdTiros--;
+                else{
+                    if (!iniciouFase){
+                        criaMapa(mapa, fase);
+                        corrigeMapa(mapa);
+                        iniciaPlayer(&p, mapa);
+                        iniciaMonstros(monstros, mapa, &qtdMonstros);
+                        pr.estado=DESATIVADO;
+                        iniciouFase=1;
                     }
-                }
-                if (pr.estado==ATIVO){
-                    moveProjetil(&pr);
-                    processaColisoesProjetil(&pr, monstros, mapa);
-                }
-                if (p.cooldownTiro>0){
-                    p.cooldownTiro--;
-                }
-                mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
 
-                if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
-                    // Caso o player ocorra de subir demais a escada
-                    corrigePersonagemY(&p); // Corrige o personagem (acaba jogando ele pra cima)
-                    p.posY+=COMP_COLUNA;    // Bota ele pra baixo
-                }
+                    if (IsKeyPressed(KEY_TAB)) {
+                        estado = PAUSADO;
+                        opcaoPause = PAUSE_CONTINUAR;
+                    }
 
-                if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
-                    danoPlayer(&p);
-                    pontos-=1000;
-                }
-                if (p.invencibilidade > 0){
-                    p.invencibilidade--;
-                }
-                if (p.saude == 0 || caiuDoMapa(p)) {
-                    estado = DERROTA;
-                }
-                if (playerNoFinal(p, mapa)) {
-                    iniciouFase=0;
-                    fase++;
+                    /* Pontos */
+                    reduzPontos(&pontos, &framesReduzirPontos);
+
+                    /* MOVIMENTACAO MONSTROS */
+                    regulaMovimentoMonstros(monstros, qtdMonstros, mapa);
+                    moveMonstros(monstros, qtdMonstros);
+
+                    /* MOVIMENTACAO PLAYER */
+                    processaMovimentoPlayer(&p, mapa);
+                    processaPlayerNaEscada(&p, mapa);
+                    processaPuloPlayer(&p, mapa);
+
+                    /* FISICA PLAYER */
+                    controlaGravidadePlayer(&p, mapa);
+                    processaGravidadePlayer(&p);
+                    processaAceleracaoPlayer(&p);
+                    processaAtritoPlayer(&p);
+
+                    /* COLISOES PLAYER */
+                    processaColisoesPlayer(&p, mapa);
+
+                    /* PROJETIL */
+                    processaProjetil(&p, &pr, mapa);
+                    mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
+
+                    if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
+                        // Caso o player ocorra de subir demais a escada
+                        corrigePersonagemY(&p); // Corrige o personagem (acaba jogando ele pra cima)
+                        p.posY+=COMP_COLUNA;    // Bota ele pra baixo
+                    }
+
+                    if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
+                        danoPlayer(&p);
+                        pontos-=1000;
+                    }
+                    if (p.invencibilidade > 0){
+                        p.invencibilidade--;
+                    }
+                    if (p.saude == 0 || caiuDoMapa(p)) {
+                        estado = DERROTA;
+                    }
+                    if (playerNoFinal(p, mapa)) {
+                        iniciouFase=0;
+                        fase++;
+                    }
                 }
                 break;
         }
@@ -217,36 +227,27 @@ int main(){
             switch(estado){
                 case MENU:
                     ClearBackground(BLACK);
-                    DrawText("Mario Games", (LARGURA/2) - (MeasureText("Mario Games", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? GOLD : ORANGE, RED, "Jogar");
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? GOLD : ORANGE, RED, "Ranking");
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? GOLD : ORANGE, RED, "Sair");
+                    desenhaTextoMenu(opcaoMenu);
                     break;
 
                 case RANKING:
                     ClearBackground(BLACK);
-                    DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), COMP_COLUNA * 25, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Voltar ao menu");
+                    desenhaTextoRanking(placar);
                     break;
 
                 case PAUSADO:
                     ClearBackground(BLACK);
-                    DrawText("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? GOLD : ORANGE, RED, "Continuar");
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? GOLD : ORANGE, RED, "Voltar ao menu");
-                    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
+                    desenhaTextoPause(opcaoPause);
                     break;
 
                 case VITORIA:
                     ClearBackground(BLACK);
-                    DrawText("Voce venceu!", (LARGURA/2) - (MeasureText("Voce venceu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, GREEN);
-                    DrawText("Pressione ENTER para voltar ao menu", (LARGURA/2) - (MeasureText("Pressione ENTER para voltar ao menu", FONTE_CABECALHO)/2), (ALTURA+CABECALHO)/2, FONTE_CABECALHO, WHITE);
+                    desenhaTextoVitoria(pontos, nomeTemp, &piscando);
                     break;
 
                 case DERROTA:
                     ClearBackground(BLACK);
-                    DrawText("Voce morreu!", (LARGURA/2) - (MeasureText("Voce morreu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
-                    DrawText("Pressione ENTER para voltar ao menu", (LARGURA/2) - (MeasureText("Pressione ENTER para voltar ao menu", FONTE_CABECALHO)/2), (ALTURA+CABECALHO)/2, FONTE_CABECALHO, WHITE);
+                    desenhaTextoDerrota();
                     break;
 
                 case EM_JOGO:
@@ -260,12 +261,10 @@ int main(){
             }
     	EndDrawing();
     }
-
+    salvaPlacar(placar);
     descarregaSpritesheet(&sprites);
     CloseWindow();
     return 0;
 }
 
 /* Coisas a fazer*/
-// Menu de ranking
-// Placar (usar uma struct de placar definida pelo professor)

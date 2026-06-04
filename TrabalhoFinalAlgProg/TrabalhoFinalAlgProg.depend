@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1778623847 source:c:\programas\trabalhos\trabalhofinalalgprog\main.c
+1780149398 source:c:\programas\trabalhos\trabalhofinalalgprog\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -7,31 +7,49 @@
 	"funcoesGerais.h"
 	"player.h"
 	"monstro.h"
+	"graficos.h"
+	"extras.h"
 
 1778539681 c:\raylib-1\include\raylib.h
 	<stdarg.h>
 	<stdbool.h>
 
-1778621460 source:c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.c
+1780149770 source:c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.c
 	"funcoesGerais.h"
 
-1778622505 c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.h
+1780149199 c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.h
 	"raylib.h"
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1778547087 source:c:\programas\trabalhos\trabalhofinalalgprog\testes.c
+1779280377 source:c:\programas\trabalhos\trabalhofinalalgprog\testes.c
 
-1778622114 source:c:\programas\trabalhos\trabalhofinalalgprog\player.c
+1779969338 source:c:\programas\trabalhos\trabalhofinalalgprog\player.c
 	"player.h"
 
-1778621129 c:\programas\trabalhos\trabalhofinalalgprog\player.h
+1779969333 c:\programas\trabalhos\trabalhofinalalgprog\player.h
 	"funcoesGerais.h"
-
-1778622798 source:c:\programas\trabalhos\trabalhofinalalgprog\monstro.c
 	"monstro.h"
 
-1778622798 c:\programas\trabalhos\trabalhofinalalgprog\monstro.h
+1779916613 source:c:\programas\trabalhos\trabalhofinalalgprog\monstro.c
+	"monstro.h"
+
+1779916464 c:\programas\trabalhos\trabalhofinalalgprog\monstro.h
 	"funcoesGerais.h"
+
+1779919121 source:c:\programas\trabalhos\trabalhofinalalgprog\graficos.c
+	"graficos.h"
+
+1780090200 c:\programas\trabalhos\trabalhofinalalgprog\graficos.h
+	"funcoesGerais.h"
+	"player.h"
+
+1780016811 source:c:\programas\trabalhos\trabalhofinalalgprog\extras.c
+	"extras.h"
+
+1779969505 c:\programas\trabalhos\trabalhofinalalgprog\extras.h
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
 

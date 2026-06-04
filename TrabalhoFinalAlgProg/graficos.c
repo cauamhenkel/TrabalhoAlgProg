@@ -55,7 +55,7 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
 }
 
 void exibeCabecalho(PLAYER p, int fase, int pontos){
-/* Essa funÃ§Ã£o desenha as informaÃ§Ãµes do cabeÃ§alho */
+/* Essa função desenha as informações do cabeçalho */
     DrawText(TextFormat("Saude: %d", p.saude), COMP_COLUNA/2, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Tiros: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     // Arrumar essa bizarrice acima depois
