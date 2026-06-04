@@ -1,4 +1,6 @@
 #include "monstro.h"
+#include "funcoesGerais.h"
+#include "raylib.h"
 
 void iniciaMonstros(MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES], int *qtdMonstros){
 /* Essa função inicia a posição dos monstros baseado no mapa define suas velocidades iniciais randomicamente */
@@ -45,15 +47,24 @@ void moveMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros){
         if (monstros[i].estadoMonstro==ATIVO){
             monstros[i].posX+=monstros[i].velX; // Muda a posição do monstro usando sua velocidade
         }
+
+        if (monstros[i].velX > 0)
+            monstros[i].dir = DIREITA;
+        else
+            monstros[i].dir = ESQUERDA;
     }
 }
 
 void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D sprite){
 /* Essa função desenha os monstros usando suas posições */
-Rectangle fonte = {0, 0, sprite.width, sprite.height}; // Retangulo referente ao sprite original
+Rectangle fonte;
 
     for (int i=0 ; i<qtdMonstros ; i++){    // Itera um número de vezes igual a quantidade de monstros
         if (monstros[i].estadoMonstro==ATIVO){
+            if (monstros[i].dir == DIREITA)
+                fonte = (Rectangle){0, 0, sprite.width, sprite.height}; // Retangulo referente ao sprite original
+            else
+                fonte = (Rectangle){sprite.width, 0, -sprite.width, sprite.height}; // Retangulo referente ao sprite original (flippado horizontamente)
             Rectangle destino = {monstros[i].posX, monstros[i].posY + CABECALHO, COMP_LINHA, COMP_COLUNA}; // Retangulo referente ao sprite exibido na tela
             DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, PURPLE);
         }
