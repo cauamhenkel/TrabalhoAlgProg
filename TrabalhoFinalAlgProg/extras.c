@@ -1,4 +1,5 @@
 #include "extras.h"
+#include "raylib.h"
 
 void criaProjetil(PLAYER p, PROJETIL *pr){
     pr->estado=ATIVO;
@@ -48,7 +49,7 @@ void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES]){
     }
 }
 
-void mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
+Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
     int poXPr=pr->posX/COMP_LINHA;
     int posYPr=pr->posY/COMP_COLUNA;
     int posXMonstroEsq, posXMonstroDir;
@@ -63,8 +64,14 @@ void mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtd
             pr->estado=DESATIVADO;
             p->qtdTiros++;
             *pontos+=500;
+            return (Vector2){monstros[i].posX, monstros[i].posY + COMP_COLUNA}; // Retorna a posicao em que o monstro morreu
         }
     }
+    return (Vector2){-1.0f, -1.0f};  // Retorna uma posicao fora da tela caso nenhum monstro tenha morrido
+}
+
+void desenhaPontosSubindo(Vector2 vec) {
+    DrawText("500", vec.x, vec.y, COMP_LINHA * 2 / 3, WHITE);
 }
 
 void desenhaProjetil(PROJETIL pr){

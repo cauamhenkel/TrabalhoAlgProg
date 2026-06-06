@@ -39,6 +39,10 @@ int main(){
     int posCaractereAtual;
     int piscando;
 
+    /* Variaveis graficas */
+    Vector2 ultima_morte_monstro = (Vector2){0.0f, 0.0f};
+    float timer_pontos_subindo = 0.0f;
+
     /* Início do código */
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
     SetTargetFPS(FPS);
@@ -197,7 +201,15 @@ int main(){
 
                     /* PROJETIL */
                     processaProjetil(&p, &pr, mapa);
-                    mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
+                    Vector2 morte_monstro = mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
+                    if (morte_monstro.x != -1.0f) {
+                        ultima_morte_monstro = morte_monstro; // Salva o ultimo ponto em que um monstro morreu
+                        timer_pontos_subindo = TEMPO_PTS_SUBINDO; // Reseta o timer para exibir os pontinhos subindo
+                    }
+                    if (timer_pontos_subindo > 0.0f) {
+                        timer_pontos_subindo -= GetFrameTime(); // Diminui o timer independentemente do FPS
+                        ultima_morte_monstro.y -= 0.5f; // Faz com que os pontinhos subam 1 pixel por frame
+                    }
 
                     if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
                         // Caso o player ocorra de subir demais a escada
@@ -251,12 +263,14 @@ int main(){
                     break;
 
                 case EM_JOGO:
-                    ClearBackground(GRAY);
+                    ClearBackground(DARKBROWN);
                     desenhaMapa(mapa, sprites.tileset);
                     desenhaPlayer(p, sprites.player);
                     desenhaMonstros(monstros, qtdMonstros, sprites.monstro);
                     desenhaProjetil(pr);
                     exibeCabecalho(p, fase, pontos);
+                    if (timer_pontos_subindo > 0.0f)
+                        desenhaPontosSubindo(ultima_morte_monstro);
                     break;
             }
     	EndDrawing();

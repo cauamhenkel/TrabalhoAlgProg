@@ -28,7 +28,7 @@ void desenhaPlayer(PLAYER p, Texture2D sprite){
     else {
         fonte = (Rectangle){sprite.width, 0, -sprite.width, sprite.height}; // Retangulo referente ao sprite original (flippado horizontamente)
     }
-    Rectangle destino = {p.posX, p.posY + CABECALHO, COMP_LINHA, COMP_COLUNA}; // Retangulo referente ao sprite exibido na tela
+    Rectangle destino = {p.posX -5, p.posY + CABECALHO -5, COMP_LINHA +5, COMP_COLUNA +5}; // Retangulo referente ao sprite exibido na tela
 
     if (p.invencibilidade % 10 > 5) // Player pisca quando toma dano
         DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED);

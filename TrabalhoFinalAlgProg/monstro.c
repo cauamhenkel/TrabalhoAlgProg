@@ -61,7 +61,7 @@ Rectangle fonte; // Retangulo referente ao sprite original
 
     for (int i=0 ; i<qtdMonstros ; i++){    // Itera um n�mero de vezes igual a quantidade de monstros
         if (monstros[i].estadoMonstro==ATIVO){
-            if (monstros[i].dir == DIREITA)
+            if (monstros[i].dir == ESQUERDA)
                 fonte = (Rectangle){0, 0, sprite.width, sprite.height}; // Retangulo referente ao sprite original
             else
                 fonte = (Rectangle){sprite.width, 0, -sprite.width, sprite.height}; // Retangulo referente ao sprite original (flippado horizontamente)
