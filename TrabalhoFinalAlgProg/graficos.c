@@ -40,20 +40,20 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
         for (int j=0; j<TILES; j++) {
             switch (mapa[i][j]) {
             case 'F':
-                tile = selecionaTile(0, 0, 32);
+                tile = selecionaTile(0, 0, 16);
                 break;
             case 'Z':
-                tile = selecionaTile(0, 1, 32);
+                tile = selecionaTile(0, 1, 16);
                 break;
             case 'S':
             case 'H':
-                tile = selecionaTile(1, 1, 32);
+                tile = selecionaTile(1, 1, 16);
                 break;
             case 'D':
-                tile = selecionaTile(2, 1, 32);
+                tile = selecionaTile(2, 1, 16);
                 break;
             case 'X':
-                tile = selecionaTile(3, 1, 32);
+                tile = selecionaTile(3, 1, 16);
                 break;
             default: continue;
             }
@@ -67,7 +67,7 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
 }
 
 void exibeCabecalho(PLAYER p, int fase, int pontos){
-/* Essa função desenha as informações do cabeçalho */
+/* Essa funï¿½ï¿½o desenha as informaï¿½ï¿½es do cabeï¿½alho */
     DrawText(TextFormat("Saude: %d", p.saude), COMP_COLUNA/2, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Tiros: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     // Arrumar essa bizarrice acima depois
