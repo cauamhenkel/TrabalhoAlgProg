@@ -263,7 +263,7 @@ int main(){
                     break;
 
                 case EM_JOGO:
-                    ClearBackground(BLUE);
+                    ClearBackground(GRAY);
                     exibeCabecalho(p, fase, pontos);
                     desenhaMapa(mapa, sprites.tileset);
 
