@@ -169,11 +169,11 @@ void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D spr
     for (int i=0 ; i<qtdMonstros ; i++){    // Itera um n&#65533;mero de vezes igual a quantidade de monstros
         if (monstros[i].estadoMonstro==ATIVO){
             Rectangle fonte = selecionaFrameMonstro(monstros[i]); // Retangulo referente ao sprite original
-            Rectangle destino = {monstros[i].posX -(COMP_LINHA/6),
-                                monstros[i].posY + CABECALHO -(COMP_LINHA/3),
-                                COMP_LINHA +(COMP_LINHA/3),
-                                COMP_COLUNA +(COMP_LINHA/3)}; // Retangulo referente ao sprite exibido na tela
-            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
+            Rectangle destino = {monstros[i].posX -(COMP_LINHA/8),
+                                monstros[i].posY + CABECALHO -(COMP_LINHA/4),
+                                COMP_LINHA +(COMP_LINHA/4),
+                                COMP_COLUNA +(COMP_LINHA/4)}; // Retangulo referente ao sprite exibido na tela
+            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, PURPLE);
         }
     }
 }
