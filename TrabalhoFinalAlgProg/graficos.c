@@ -7,7 +7,7 @@
 void carregaSpritesheet(Spritesheet *sprites) {
     sprites->player = LoadTexture("assets/player.png");
     sprites->monstro = LoadTexture("assets/monstro.png");
-    sprites->tileset = LoadTexture("assets/tileset.png");
+    sprites->tileset = LoadTexture("assets/tileset_2.png");
 }
 
 void descarregaSpritesheet(Spritesheet *sprites) {
@@ -173,7 +173,7 @@ void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D spr
                                 monstros[i].posY + CABECALHO -(COMP_LINHA/4),
                                 COMP_LINHA +(COMP_LINHA/4),
                                 COMP_COLUNA +(COMP_LINHA/4)}; // Retangulo referente ao sprite exibido na tela
-            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, PURPLE);
+            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
         }
     }
 }
