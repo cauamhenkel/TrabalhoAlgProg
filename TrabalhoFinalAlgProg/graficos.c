@@ -1,5 +1,6 @@
 #include "graficos.h"
 #include "funcoesGerais.h"
+#include "monstro.h"
 #include "player.h"
 #include "raylib.h"
 
@@ -34,7 +35,7 @@ Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile) {
 }
 
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
-    Rectangle tile;
+    Rectangle tile, destino;
 
     for (int i=0; i<TILES; i++) {
         for (int j=0; j<TILES; j++) {
@@ -57,10 +58,20 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
                 break;
             default: continue;
             }
-            Rectangle destino = {j * COMP_LINHA,
-                                 i * COMP_COLUNA + CABECALHO,
-                                 COMP_LINHA,
-                                 COMP_COLUNA};
+
+            if (mapa[i][j] == 'F') {
+                destino = (Rectangle) {j * COMP_LINHA -(COMP_LINHA/4),
+                                    i * COMP_COLUNA + CABECALHO -(COMP_COLUNA/2),
+                                    COMP_LINHA +(COMP_LINHA/2),
+                                    COMP_COLUNA +(COMP_COLUNA/2)};
+            } // Faz com que a joia do final seja um pouco maior que o tile normal (questoes esteticas)
+            else {
+                destino = (Rectangle) {j * COMP_LINHA,
+                                    i * COMP_COLUNA + CABECALHO,
+                                    COMP_LINHA,
+                                    COMP_COLUNA};
+            }
+
             DrawTexturePro(tileset, tile, destino, (Vector2){0,0}, 0.0f, WHITE);
         }
     }
@@ -89,7 +100,7 @@ void atualizaAnimacaoPlayer(PLAYER *p) {
     }
 }
 
-Rectangle selecionaFrame(PLAYER p) {
+Rectangle selecionaFramePlayer(PLAYER p) {
     Rectangle fonte;
 
     if (p.naEscada)
@@ -119,7 +130,7 @@ Rectangle selecionaFrame(PLAYER p) {
 }
 
 void desenhaPlayer(PLAYER p, Texture2D sprite){
-    Rectangle fonte = selecionaFrame(p);
+    Rectangle fonte = selecionaFramePlayer(p);
     Rectangle destino = {p.posX -(COMP_LINHA/8),
                          p.posY + CABECALHO -(COMP_COLUNA/4),
                          COMP_LINHA +(COMP_LINHA/4),
@@ -129,4 +140,40 @@ void desenhaPlayer(PLAYER p, Texture2D sprite){
         DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED);
     else
         DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE); // Funcao escala automaticamente o retangulo da fonte para o do destino
+}
+
+void atualizaAnimacaoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros) {
+    for (int i=0; i<qtdMonstros; i++) {
+        monstros[i].animacaoTimer += GetFrameTime();
+        if (monstros[i].animacaoTimer >= 1.0f / 8.0f) { // 8 Frames Por Segundo
+            monstros[i].animacaoTimer = 0; // Reseta o timer
+
+            monstros[i].frameAtual = (monstros[i].frameAtual + 1) % 8; // Animacao do cavalo zumbi andando tem 8 frames
+        }
+    }
+}
+
+Rectangle selecionaFrameMonstro(MONSTRO monstro) {
+    Rectangle fonte;
+
+    if (monstro.dir == ESQUERDA)
+        fonte = selecionaTile(monstro.frameAtual, 0, 16);
+    else
+        fonte = selecionaTileInverso(monstro.frameAtual, 0, 16);
+
+    return fonte;
+}
+
+void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D sprite){
+/* Essa fun&#65533;&#65533;o desenha os monstros usando suas posi&#65533;&#65533;es */
+    for (int i=0 ; i<qtdMonstros ; i++){    // Itera um n&#65533;mero de vezes igual a quantidade de monstros
+        if (monstros[i].estadoMonstro==ATIVO){
+            Rectangle fonte = selecionaFrameMonstro(monstros[i]); // Retangulo referente ao sprite original
+            Rectangle destino = {monstros[i].posX -(COMP_LINHA/6),
+                                monstros[i].posY + CABECALHO -(COMP_LINHA/3),
+                                COMP_LINHA +(COMP_LINHA/3),
+                                COMP_COLUNA +(COMP_LINHA/3)}; // Retangulo referente ao sprite exibido na tela
+            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
+        }
+    }
 }

@@ -11,6 +11,8 @@ void iniciaMonstros(MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES], int *q
                 monstros[k].posX=j*COMP_LINHA;         // Define a posi��o horizontal como o comprimento da linha multiplicado pelo numero da coluna da matriz
                 monstros[k].posY=i*COMP_COLUNA;        // Define a posi��o vertical como o comprimento da coluna multiplicado pelo numero da linha da matriz
                 monstros[k].estadoMonstro=ATIVO;
+                monstros[k].animacaoTimer=0;
+                monstros[k].frameAtual=0;
 
                 if (GetRandomValue(0,1)==0)
                     monstros[k].velX=M_VEL_X;    // Define a velocidade como positiva
@@ -52,22 +54,6 @@ void moveMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros){
             monstros[i].dir = DIREITA;
         else
             monstros[i].dir = ESQUERDA;
-    }
-}
-
-void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D sprite){
-/* Essa fun��o desenha os monstros usando suas posi��es */
-Rectangle fonte; // Retangulo referente ao sprite original
-
-    for (int i=0 ; i<qtdMonstros ; i++){    // Itera um n�mero de vezes igual a quantidade de monstros
-        if (monstros[i].estadoMonstro==ATIVO){
-            if (monstros[i].dir == ESQUERDA)
-                fonte = (Rectangle){0, 0, sprite.width, sprite.height}; // Retangulo referente ao sprite original
-            else
-                fonte = (Rectangle){sprite.width, 0, -sprite.width, sprite.height}; // Retangulo referente ao sprite original (flippado horizontamente)
-            Rectangle destino = {monstros[i].posX, monstros[i].posY + CABECALHO, COMP_LINHA, COMP_COLUNA}; // Retangulo referente ao sprite exibido na tela
-            DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, PURPLE);
-        }
     }
 }
 
