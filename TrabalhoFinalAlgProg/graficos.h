@@ -16,7 +16,11 @@ void carregaSpritesheet(Spritesheet *sprites);
 void descarregaSpritesheet(Spritesheet *sprites);
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset);
 void exibeCabecalho(PLAYER p, int fase, int pontos);
+void atualizaAnimacaoPlayer(PLAYER *p);
+void desenhaPlayer(PLAYER p, Texture2D sprite);
 
-Rectangle selecionaTile(int coluna, int linha);
+Rectangle selecionaTile(int coluna, int linha, int tam_tile);
+Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile);
+Rectangle selecionaFrame(PLAYER p);
 
 #endif

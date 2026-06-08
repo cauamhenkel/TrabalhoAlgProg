@@ -1,4 +1,7 @@
 #include "graficos.h"
+#include "funcoesGerais.h"
+#include "player.h"
+#include "raylib.h"
 
 void carregaSpritesheet(Spritesheet *sprites) {
     sprites->player = LoadTexture("assets/player.png");
@@ -12,11 +15,20 @@ void descarregaSpritesheet(Spritesheet *sprites) {
     UnloadTexture(sprites->tileset);
 }
 
-Rectangle selecionaTile(int coluna, int linha) {
-    Rectangle tile = {coluna * TAM_TILE,
-                      linha * TAM_TILE,
-                      TAM_TILE,
-                      TAM_TILE};
+Rectangle selecionaTile(int coluna, int linha, int tam_tile) {
+    Rectangle tile = {coluna * tam_tile,
+                      linha * tam_tile,
+                      tam_tile,
+                      tam_tile};
+
+    return tile;
+}
+
+Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile) {
+    Rectangle tile = {coluna * tam_tile,
+                      linha * tam_tile,
+                      -tam_tile,
+                      tam_tile};
 
     return tile;
 }
@@ -28,20 +40,20 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset) {
         for (int j=0; j<TILES; j++) {
             switch (mapa[i][j]) {
             case 'F':
-                tile = selecionaTile(0, 0);
+                tile = selecionaTile(0, 0, 32);
                 break;
             case 'Z':
-                tile = selecionaTile(0, 1);
+                tile = selecionaTile(0, 1, 32);
                 break;
             case 'S':
             case 'H':
-                tile = selecionaTile(1, 1);
+                tile = selecionaTile(1, 1, 32);
                 break;
             case 'D':
-                tile = selecionaTile(2, 1);
+                tile = selecionaTile(2, 1, 32);
                 break;
             case 'X':
-                tile = selecionaTile(3, 1);
+                tile = selecionaTile(3, 1, 32);
                 break;
             default: continue;
             }
@@ -61,4 +73,60 @@ void exibeCabecalho(PLAYER p, int fase, int pontos){
     // Arrumar essa bizarrice acima depois
     DrawText(TextFormat("Pontos: %d", pontos), (LARGURA/2)-(MeasureText("Pontos : 5000", FONTE_CABECALHO)/2), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Fase atual: %d", fase+1), LARGURA - (MeasureText("Fase atual: 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+}
+
+void atualizaAnimacaoPlayer(PLAYER *p) {
+    p->animacaoTimer += GetFrameTime();
+    if (p->animacaoTimer >= 1.0f / 8.0f) { // 8 Frames Por Segundo
+        p->animacaoTimer = 0; // Reseta o timer
+
+        if (p->noChao && (p->velX > 0.6 || p->velX < -0.6))
+            p->frameAtual = (p->frameAtual + 1) % 3; // Animacao de caminhar tem 3 frames
+        else if (p->naEscada && (IsKeyDown(KEY_W) || IsKeyDown(KEY_S)))
+            p->frameAtual = (p->frameAtual + 1) % 2; // Animacao de escada tem 2 frames
+        else
+            p->frameAtual =0;
+    }
+}
+
+Rectangle selecionaFrame(PLAYER p) {
+    Rectangle fonte;
+
+    if (p.naEscada)
+        fonte = selecionaTile(p.frameAtual, 2, 16);
+    else if (p.dir == DIREITA) {
+        if (p.noChao) {
+            if (p.velX > 0.6)
+                fonte = selecionaTile(p.frameAtual, 1, 16);
+            else
+                fonte = selecionaTile(0, 0, 16);
+        }
+        else
+            fonte = selecionaTile(1, 0, 16);
+    }
+    else if (p.dir == ESQUERDA) {
+        if (p.noChao) {
+            if (p.velX < -0.6)
+                fonte = selecionaTileInverso(p.frameAtual, 1, 16);
+            else
+                fonte = selecionaTileInverso(0, 0, 16);
+        }
+        else
+            fonte = selecionaTileInverso(1, 0, 16);
+    }
+
+    return fonte;
+}
+
+void desenhaPlayer(PLAYER p, Texture2D sprite){
+    Rectangle fonte = selecionaFrame(p);
+    Rectangle destino = {p.posX -(COMP_LINHA/8),
+                         p.posY + CABECALHO -(COMP_COLUNA/4),
+                         COMP_LINHA +(COMP_LINHA/4),
+                         COMP_COLUNA +(COMP_COLUNA/4)}; // Retangulo referente ao sprite exibido na tela
+
+    if (p.invencibilidade % 10 > 5) // Player pisca quando toma dano
+        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED);
+    else
+        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE); // Funcao escala automaticamente o retangulo da fonte para o do destino
 }

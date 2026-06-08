@@ -265,6 +265,7 @@ int main(){
                 case EM_JOGO:
                     ClearBackground(DARKBROWN);
                     desenhaMapa(mapa, sprites.tileset);
+                    atualizaAnimacaoPlayer(&p);
                     desenhaPlayer(p, sprites.player);
                     desenhaMonstros(monstros, qtdMonstros, sprites.monstro);
                     desenhaProjetil(pr);

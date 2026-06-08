@@ -18,26 +18,12 @@ void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
     p->naEscada=0;
     p->qtdTiros=P_QTD_TIROS;
     p->cooldownTiro=0;
-}
-
-void desenhaPlayer(PLAYER p, Texture2D sprite){
-    Rectangle fonte;
-    if (p.dir == DIREITA) {
-        fonte = (Rectangle){0, 0, sprite.width, sprite.height}; // Retangulo referente ao sprite original
-    }
-    else {
-        fonte = (Rectangle){sprite.width, 0, -sprite.width, sprite.height}; // Retangulo referente ao sprite original (flippado horizontamente)
-    }
-    Rectangle destino = {p.posX -(COMP_LINHA/4), p.posY + CABECALHO -(COMP_COLUNA/4), COMP_LINHA +(COMP_LINHA/4), COMP_COLUNA +(COMP_COLUNA/4)}; // Retangulo referente ao sprite exibido na tela
-
-    if (p.invencibilidade % 10 > 5) // Player pisca quando toma dano
-        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED);
-    else
-        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE); // Funcao escala automaticamente o retangulo da fonte para o do destino
+    p->animacaoTimer=0;
+    p->frameAtual=0;
 }
 
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]) {
-    if (p->naEscada || playerNoChao(*p, mapa) || playerNaPlataforma(*p, mapa)) {
+    if (p->naEscada || playerNoChao(p, mapa) || playerNaPlataforma(p, mapa)) {
         p->afetadoGravidade = 0;
     }
     else
@@ -133,7 +119,7 @@ void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]) {
             p->naEscada=1;
             centralizaPlayerNaEscada(p, mapa);
         }
-        if (p->naEscada && !playerNoChao(*p, mapa)){
+        if (p->naEscada && !playerNoChao(p, mapa)){
             p->posY+=P_VEL_ESCADA;
         }
     }
@@ -142,15 +128,16 @@ void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]) {
 void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES]) {
     if (IsKeyPressed(KEY_SPACE)){
         p->naEscada=0;
-        if (playerNoChao(*p, mapa) || playerNaPlataforma(*p, mapa)){
+        if (playerNoChao(p, mapa) || playerNaPlataforma(p, mapa)){
             p->posY -= COMP_COLUNA/4; // Tira o player do chao para que nao fique preso
             p->velY = P_VEL_PULO;
+            p->noChao = 0;
         }
     }
 }
 
 void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]) {
-    if (playerNoChao(*p, mapa) || playerNaPlataforma(*p, mapa) && !(*p).naEscada){
+    if (playerNoChao(p, mapa) || playerNaPlataforma(p, mapa) && !(*p).naEscada){
         corrigePersonagemY(p);
         p->velY=0;
     }
@@ -232,24 +219,28 @@ int colidiuParedeEsquerda(PLAYER p, char mapa[TILES][TILES]){
         return 0;
 }
 
-int playerNoChao(PLAYER p, char mapa[TILES][TILES]){
-    int posXGridEsquerda=p.posX/COMP_LINHA;
-    int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
-    int posYGrid=p.posY/COMP_COLUNA;
+int playerNoChao(PLAYER *p, char mapa[TILES][TILES]){
+    int posXGridEsquerda=p->posX/COMP_LINHA;
+    int posXGridDireita=(p->posX+COMP_LINHA-1)/COMP_LINHA;
+    int posYGrid=p->posY/COMP_COLUNA;
 
-    if (mapa[posYGrid+1][posXGridEsquerda]=='Z' || mapa[posYGrid+1][posXGridDireita]=='Z')
+    if (mapa[posYGrid+1][posXGridEsquerda]=='Z' || mapa[posYGrid+1][posXGridDireita]=='Z') {
+        p->noChao = 1;
         return 1;
+    }
     else
         return 0;
 }
 
-int playerNaPlataforma(PLAYER p, char mapa[TILES][TILES]){
-    int posXGridEsquerda=p.posX/COMP_LINHA;
-    int posXGridDireita=(p.posX+COMP_LINHA-1)/COMP_LINHA;
-    int posYGrid=p.posY/COMP_COLUNA;
+int playerNaPlataforma(PLAYER *p, char mapa[TILES][TILES]){
+    int posXGridEsquerda=p->posX/COMP_LINHA;
+    int posXGridDireita=(p->posX+COMP_LINHA-1)/COMP_LINHA;
+    int posYGrid=p->posY/COMP_COLUNA;
 
-    if (mapa[posYGrid+1][posXGridEsquerda]=='X' || mapa[posYGrid+1][posXGridDireita]=='X')
+    if (mapa[posYGrid+1][posXGridEsquerda]=='X' || mapa[posYGrid+1][posXGridDireita]=='X') {
+        p->noChao = 1;
         return 1;
+    }
     else
         return 0;
 }

@@ -8,13 +8,15 @@ typedef struct{
     int posX; float velX, accX;
     int posY; float velY, accY;
     Direcao dir;
+
     int saude, invencibilidade;
-    int naEscada, afetadoGravidade;
+    int naEscada, noChao, afetadoGravidade;
     int qtdTiros, cooldownTiro;
+
+    float animacaoTimer; int frameAtual;
 } PLAYER;
 
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
-void desenhaPlayer(PLAYER p, Texture2D sprite);
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaGravidadePlayer(PLAYER *p);
 void processaAceleracaoPlayer(PLAYER *p);
@@ -33,8 +35,8 @@ int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros);
 int colidiuTeto(PLAYER p, char mapa[TILES][TILES]);
 int colidiuParedeDireita(PLAYER p, char mapa[TILES][TILES]);
 int colidiuParedeEsquerda(PLAYER p, char mapa[TILES][TILES]);
-int playerNoChao(PLAYER p, char mapa[TILES][TILES]);
-int playerNaPlataforma(PLAYER p, char mapa[TILES][TILES]);
+int playerNoChao(PLAYER *p, char mapa[TILES][TILES]);
+int playerNaPlataforma(PLAYER *p, char mapa[TILES][TILES]);
 int checaPlayerMapa(PLAYER p, char mapa[TILES][TILES], char ch);
 int playerNaSubida(PLAYER p, char mapa[TILES][TILES]);
 int playerNaEscada(PLAYER p, char mapa[TILES][TILES]);
