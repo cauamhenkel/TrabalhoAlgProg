@@ -6,7 +6,7 @@
 void carregaSpritesheet(Spritesheet *sprites) {
     sprites->player = LoadTexture("assets/player.png");
     sprites->monstro = LoadTexture("assets/monstro.png");
-    sprites->tileset = LoadTexture("assets/tileset.png");
+    sprites->tileset = LoadTexture("assets/tileset_2.png");
 }
 
 void descarregaSpritesheet(Spritesheet *sprites) {
