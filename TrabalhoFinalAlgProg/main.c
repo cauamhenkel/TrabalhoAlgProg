@@ -263,13 +263,17 @@ int main(){
                     break;
 
                 case EM_JOGO:
-                    ClearBackground(DARKBROWN);
+                    ClearBackground(BLUE);
+                    exibeCabecalho(p, fase, pontos);
                     desenhaMapa(mapa, sprites.tileset);
+
                     atualizaAnimacaoPlayer(&p);
                     desenhaPlayer(p, sprites.player);
+
+                    atualizaAnimacaoMonstros(monstros, qtdMonstros);
                     desenhaMonstros(monstros, qtdMonstros, sprites.monstro);
+
                     desenhaProjetil(pr);
-                    exibeCabecalho(p, fase, pontos);
                     if (timer_pontos_subindo > 0.0f)
                         desenhaPontosSubindo(ultima_morte_monstro);
                     break;
