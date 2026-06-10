@@ -3,6 +3,7 @@
 
 #include "funcoesGerais.h"
 #include "player.h"
+#include "raylib.h"
 
 #define TAM_TILE 32
 
@@ -12,8 +13,23 @@ typedef struct{
     Texture2D tileset;
 } Spritesheet;
 
+typedef struct {
+    Sound botao;
+    Sound caminhada;
+    Sound dano;
+    Sound gameover;
+    Sound mordida1;
+    Sound mordida2;
+    Sound salto1;
+    Sound salto2;
+    Sound monstro_dano;
+    Sound tiro;
+} Soundtrack;
+
 void carregaSpritesheet(Spritesheet *sprites);
 void descarregaSpritesheet(Spritesheet *sprites);
+void carregaSoundtrack(Soundtrack *sounds);
+void descarregaSoundtrack(Soundtrack *sounds);
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset);
 void exibeCabecalho(PLAYER p, int fase, int pontos);
 void atualizaAnimacaoPlayer(PLAYER *p);

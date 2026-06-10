@@ -1,4 +1,5 @@
 #include "extras.h"
+#include "graficos.h"
 #include "raylib.h"
 
 void criaProjetil(PLAYER p, PROJETIL *pr){
@@ -31,10 +32,11 @@ void processaColisoesProjetil(PROJETIL *pr, char mapa[TILES][TILES]){
     }
 }
 
-void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES]){
+void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES], Soundtrack sounds){
     if (IsKeyPressed(KEY_K) && !p->naEscada && p->qtdTiros>0 && p->cooldownTiro==0){
         criaProjetil(*p, pr);
         p->cooldownTiro=P_COOLDOWN_TIRO;
+        PlaySound(sounds.tiro);
 
         if (p->qtdTiros>0){
             p->qtdTiros--;

@@ -16,6 +16,18 @@ void descarregaSpritesheet(Spritesheet *sprites) {
     UnloadTexture(sprites->tileset);
 }
 
+void carregaSoundtrack(Soundtrack *sounds) {
+    sounds->botao = LoadSound("assets/audio/botao.wav");
+    sounds->tiro = LoadSound("assets/audio/tiro.wav");
+    sounds->monstro_dano = LoadSound("assets/audio/monstrodano.wav");
+}
+
+void descarregaSoundtrack(Soundtrack *sounds) {
+    UnloadSound(sounds->botao);
+    UnloadSound(sounds->tiro);
+    UnloadSound(sounds->monstro_dano);
+}
+
 Rectangle selecionaTile(int coluna, int linha, int tam_tile) {
     Rectangle tile = {coluna * tam_tile,
                       linha * tam_tile,

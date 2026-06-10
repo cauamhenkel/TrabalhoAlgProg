@@ -47,15 +47,24 @@ int main(){
     InitWindow(LARGURA, ALTURA+CABECALHO, "Mario Games");
     SetTargetFPS(FPS);
     HideCursor();
+
     /* SPRITES */
     Spritesheet sprites;
     carregaSpritesheet(&sprites);
+
+    /* SOUNDTRACK */
+    InitAudioDevice();
+    Soundtrack sounds;
+    carregaSoundtrack(&sounds);
+
     /* Carrega o placar */
     lePlacar(placar);
 
     while (!WindowShouldClose() && !sair) {
         switch (estado){
             case MENU:
+                if (IsKeyPressed(KEY_ENTER))
+                    PlaySound(sounds.botao);
                 if (IsKeyPressed(KEY_UP)){
                     if (opcaoMenu==MENU_JOGAR)
                         opcaoMenu=MENU_SAIR;
@@ -99,6 +108,8 @@ int main(){
                     break;
 
             case PAUSADO:
+                if (IsKeyPressed(KEY_ENTER))
+                    PlaySound(sounds.botao);
                 if (IsKeyPressed(KEY_UP)){
                     if (opcaoPause==PAUSE_CONTINUAR)
                         opcaoPause=PAUSE_SAIR;
@@ -142,6 +153,7 @@ int main(){
                     }
                 }
                 if (IsKeyPressed(KEY_ENTER) && strlen(nomeTemp)>0){
+                    PlaySound(sounds.botao);
                     colocaNoPlacar(placar, nomeTemp, pontos);
                     ordenarPlacar(placar);
                     estado = MENU;
@@ -151,6 +163,7 @@ int main(){
 
             case DERROTA:
                 if (IsKeyPressed(KEY_ENTER)){
+                    PlaySound(sounds.botao);
                     estado = MENU;
                     opcaoMenu=MENU_JOGAR;
                 }
@@ -200,9 +213,10 @@ int main(){
                     processaColisoesPlayer(&p, mapa);
 
                     /* PROJETIL */
-                    processaProjetil(&p, &pr, mapa);
+                    processaProjetil(&p, &pr, mapa, sounds);
                     Vector2 morte_monstro = mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &pontos);
                     if (morte_monstro.x != -1.0f) {
+                        PlaySound(sounds.monstro_dano);
                         ultima_morte_monstro = morte_monstro; // Salva o ultimo ponto em que um monstro morreu
                         timer_pontos_subindo = TEMPO_PTS_SUBINDO; // Reseta o timer para exibir os pontinhos subindo
                     }
@@ -282,6 +296,8 @@ int main(){
     }
     salvaPlacar(placar);
     descarregaSpritesheet(&sprites);
+    descarregaSoundtrack(&sounds);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
