@@ -79,7 +79,7 @@ void desenhaProjetil(PROJETIL pr){
         DrawRectangle(pr.posX, pr.posY+(COMP_COLUNA*1.5), COMP_LINHA/5, COMP_COLUNA/5, WHITE);
 }
 
-Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos){
+Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *qtdMonstrosMortos, int *pontos){
 /* Essa função mata o monstro caso o projetil colida com ele */
     // Funções para transformar as posições em grid e facilitar os cálculos
     int poXPr=pr->posX/COMP_LINHA;
@@ -98,8 +98,9 @@ Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int 
             pr->estado=DESATIVADO;
             // O player recebe uma munição extra
             p->qtdTiros++;
-            // O player recebe pontos por matar o monstro
+            // O player recebe pontos por matar o monstro e aumenta o acumulador de monstros mortos por ele
             *pontos+=QTD_PONTOS_GANHO_DOS_INIMIGOS;
+            (*qtdMonstrosMortos)++;
             // Retorna a posicao em que o monstro morreu
             return (Vector2){monstros[i].posX, monstros[i].posY + COMP_COLUNA};
         }
