@@ -35,13 +35,13 @@ void descarregaSoundtrack(Soundtrack *sounds){
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset){
 /* Essa função desenha o mapa usando o grid salvo como referência e um tileset */
     Rectangle tile, destino;
-// Comenta isso aqui mateus eu sei la que porra tu ta fazendo
+// Percorre cada um dos caracteres do mapa e utiliza uma funcao auxiliar para selecionar o tile relativo a esse caractere na tileset
     for (int i=0; i<TILES; i++) {
         for (int j=0; j<TILES; j++) {
             switch (mapa[i][j]) {
             case 'F':
-                tile = selecionaTile(0, 0, 16);
-                break;
+                tile = selecionaTile(0, 0, 16); // Exemplo: a posicao do caractere 'F' na tileset é (0,0)
+                break;                          // Ou seja, o sprite da joia do final da fase se encontra nessa posicao na imagem da tileset
             case 'Z':
                 tile = selecionaTile(0, 1, 16);
                 break;
@@ -65,13 +65,15 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset){
                                     COMP_COLUNA +(COMP_COLUNA/2)};
             }
             else {
-                // Tipo, que merda é essa ////////////////////////////////////////////////////////////////////////////////////////////
+                // Define o retangulo de destino (o que sera mostrado na tela) com base na posicao do caractere
                 destino = (Rectangle) {j * COMP_LINHA,
                                     i * COMP_COLUNA + CABECALHO,
                                     COMP_LINHA,
                                     COMP_COLUNA};
             }
-            // WTF ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // A funcao DrawTexturePro recebe como parametro uma Texture2D como sprite, um Rectangle como fonte, um Rectangle como destino, um Vector2 para a posicao relativa ao ponto de origem da fonte, um float para a rotacao do retangulo destino e uma cor
+            // Nesse caso, o Rectangle fonte é o 'recorte' do sprite que será desenhado, definido na funcão com base no tileset
+            // Enquanto o Rectangle de destino é declarado com base na posicão do caractere
             DrawTexturePro(tileset, tile, destino, (Vector2){0,0}, 0.0f, WHITE);
         }
     }
@@ -113,10 +115,9 @@ void desenhaPlayer(PLAYER p, Texture2D sprite){
                          p.posY + CABECALHO -(COMP_COLUNA/4),
                          COMP_LINHA +(COMP_LINHA/4),
                          COMP_COLUNA +(COMP_COLUNA/4)};
-    // Player pisca quando toma dano
     // Funcao escala automaticamente o retangulo da fonte para o do destino
     if (p.invencibilidade % 10 > 5)
-        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED);
+        DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, RED); // Player pisca quando toma dano
     else
         DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
 }
@@ -155,7 +156,8 @@ void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D spr
 }
 
 Rectangle selecionaTile(int coluna, int linha, int tam_tile){
-/* Essa função constrói um retângulo usando os valores de entrada como referência */
+/* Essa funcao recebe as coordenadas e o tamanho do tile a ser selecionado, e devolve um Rectangle com essas informacoes
+ * É usada como funcao auxiliar para definir o Rectangle fonte das funcoes que utilizam DrawTexturePro  */
     Rectangle tile = {coluna * tam_tile,
                       linha * tam_tile,
                       tam_tile,
@@ -165,7 +167,7 @@ Rectangle selecionaTile(int coluna, int linha, int tam_tile){
 }
 
 Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile){
-/* Não faço ideia, comenta melhor teus código Mateus, eu sou burro */ ////////////////////////////////////////////////////////////////////////////
+/* Essa funcao faz a mesma coisa que a outra, so que retorna o Rectangle flippado horizontamente (para desenhar o sprite virado para a esquerda) */
     Rectangle tile = {coluna * tam_tile,
                       linha * tam_tile,
                       -tam_tile,
@@ -175,21 +177,23 @@ Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile){
 }
 
 Rectangle selecionaFramePlayer(PLAYER p){
-/* Sei la que porra, Mateus comente isso aqui depois */ ///////////////////////////////////////////////////////////////////////////////
+/* Essa funcao define, com base no que está acontecendo no jogo e na spritesheet do player, qual frame do player sera exibido na tela
+ * As acoes que possuem animacao (como subir escada e caminhar) selecionam o frame baseado na variavel p.frameAtual, que é atualizada na funcao atualizaAnimacaoPlayer */
     Rectangle fonte;
 
     if (p.naEscada)
-        fonte = selecionaTile(p.frameAtual, 2, 16);
+        fonte = selecionaTile(p.frameAtual, 2, 16);         // Animacao para o player subindo as escadas
     else if (p.dir == DIREITA) {
         if (p.noChao) {
             if (p.velX > 0.6)
-                fonte = selecionaTile(p.frameAtual, 1, 16);
+                fonte = selecionaTile(p.frameAtual, 1, 16); // Animacao para o player caminhando
             else
-                fonte = selecionaTile(0, 0, 16);
+                fonte = selecionaTile(0, 0, 16);            // Sprite para o player parado
         }
         else
-            fonte = selecionaTile(1, 0, 16);
+            fonte = selecionaTile(1, 0, 16);                // Sprite para o player pulando
     }
+    // A partir daqui é a mesma coisa, so que pra esquerda
     else if (p.dir == ESQUERDA) {
         if (p.noChao) {
             if (p.velX < -0.6)
@@ -205,7 +209,7 @@ Rectangle selecionaFramePlayer(PLAYER p){
 }
 
 Rectangle selecionaFrameMonstro(MONSTRO monstro){
-/* Sei lá não entendo SOS Mateus */ //////////////////////////////////////////////////////////////////////////////////////////
+/* Essa funcao define, com base na direcao que o monstro esta caminhando, qual frame de sua spritesheet sera mostrado na tela */
     Rectangle fonte;
 
     if (monstro.dir == ESQUERDA)
