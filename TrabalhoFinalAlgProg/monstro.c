@@ -1,55 +1,68 @@
 #include "monstro.h"
-#include "funcoesGerais.h"
 #include "raylib.h"
+#include "funcoesGerais.h"
 
 void iniciaMonstros(MONSTRO monstros[M_QTD_MAX], char mapa[TILES][TILES], int *qtdMonstros){
-/* Essa fun��o inicia a posi��o dos monstros baseado no mapa define suas velocidades iniciais randomicamente */
-    int k=0;                                           // Vari�vel usada para acessar e manipular o vetor dos monstros
-    for (int i=0 ; i<TILES ; i++){                        // Percorre a matriz
+/* Essa função inicia a posição dos monstros baseado no mapa define suas velocidades iniciais randomicamente */
+    // Variável usada para acessar e manipular o vetor dos monstros
+    int k=0;
+    // Percorre a matriz
+    for (int i=0 ; i<TILES ; i++){
         for (int j=0 ; j<TILES ; j++){
-            if (mapa[i][j]=='E'){                      // Se encontrar a posi��o de um monstro no mapa
-                monstros[k].posX=j*COMP_LINHA;         // Define a posi��o horizontal como o comprimento da linha multiplicado pelo numero da coluna da matriz
-                monstros[k].posY=i*COMP_COLUNA;        // Define a posi��o vertical como o comprimento da coluna multiplicado pelo numero da linha da matriz
+            if (mapa[i][j]=='E'){
+                // Se encontrar o monstro na matriz inicia sua posição e informações necessárias
+                monstros[k].posX=j*COMP_LINHA;
+                monstros[k].posY=i*COMP_COLUNA;
                 monstros[k].estadoMonstro=ATIVO;
                 monstros[k].animacaoTimer=0;
                 monstros[k].frameAtual=0;
 
+                // Decide aleatóriamente a direção que o monstro vai seguir, com positivo sendo para a direita e negativo para a esquerda
                 if (GetRandomValue(0,1)==0)
-                    monstros[k].velX=M_VEL_X;    // Define a velocidade como positiva
+                    monstros[k].velX=M_VEL_X;
                 else
-                    monstros[k].velX=-M_VEL_X;   // Ou negativa
-
-                k++;                                   // Incrementa a vari�vel para manipular a pr�xima posi��o do vetor
+                    monstros[k].velX=-M_VEL_X;
+                // Incrementa a variável para manipular a próxima posição do vetor
+                k++;
             }
         }
     }
-    *qtdMonstros=k;                                    // Altera a quantidade de monstros para a quantidade de monstros encontrados na verifica��o do mapa
+    // Atualiza a quantidade de monstros encontrados no mapa
+    *qtdMonstros=k;
 }
 
 void regulaMovimentoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, char mapa[TILES][TILES]){
-/* Essa posi��o altera a dire��o do movimento dos monstros checando suas posi��es no mapa */
-    for (int i=0 ; i<qtdMonstros ; i++){                   // Itera um n�mero de vezes igual a quantidade de monstros
+/* Essa função altera a direção do movimento dos monstros checando suas posições no mapa */
+    // Itera um número de vezes igual a quantidade de monstros
+    for (int i=0 ; i<qtdMonstros ; i++){
         if (monstros[i].estadoMonstro==ATIVO){
-            if (monstros[i].posX-1<0)                      // Verifica se o monstro est� tocando a borda esquerda
-                monstros[i].velX*=-1;                      // Se sim, muda sua dire��o
-            else if (monstros[i].velX>0){                  // Verifica se o monstro est� se movendo para a direita
-                if (!temChaoNaDireita(monstros[i], mapa))  // Se sim, verifica se tem ch�o na sua frente
-                    monstros[i].velX*=-1;                  // Se n�o tiver, muda sua dire��o
+             // Verifica se o monstro está tocando a borda esquerda e altera sua direção se necessário
+            if (monstros[i].posX-1<0)
+                monstros[i].velX*=-1;
+            // Verifica se o monstro está se movendo para a direita
+            else if (monstros[i].velX>0){
+                // Verifica se tem chão na sua frente e se necessário muda sua direção
+                if (!temChaoNaDireita(monstros[i], mapa))
+                    monstros[i].velX*=-1;
             }
-            else                                           // Se n�o, o monstro est� se movendo para a esquerda
-                if (!temChaoNaEsquerda(monstros[i], mapa)) // Verifica se tem ch�o na sua frente
-                    monstros[i].velX*=-1;                  // Se n�o tiver, muda sua dire��o
+            // Se não ele está se movendo para a esquerda
+            else
+                // Verifica se tem chão na sua frente e se necessário muda sua direção
+                if (!temChaoNaEsquerda(monstros[i], mapa))
+                    monstros[i].velX*=-1;
         }
     }
 }
 
 void moveMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros){
-/* Essa fun��o muda a posi��o dos monstros */
-    for (int i=0 ; i<qtdMonstros ; i++){        // Itera um n�mero de vezes igual a quantidade de monstros
+/* Essa função muda a posição dos monstros no mapa */
+    // Itera um número de vezes igual a quantidade de monstros
+    for (int i=0 ; i<qtdMonstros ; i++){
+        // Se o monstro estiver ativo muda sua posição usando sua velocidade
         if (monstros[i].estadoMonstro==ATIVO){
-            monstros[i].posX+=monstros[i].velX; // Muda a posi��o do monstro usando sua velocidade
+            monstros[i].posX+=monstros[i].velX;
         }
-
+        // Atualiza qual a direção do monstro
         if (monstros[i].velX > 0)
             monstros[i].dir = DIREITA;
         else
@@ -58,23 +71,25 @@ void moveMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros){
 }
 
 int temChaoNaDireita(MONSTRO monstro, char mapa[TILES][TILES]){
-/* Essa fun��o verifica se h� um ch�o na direita do monstro */
-    int posXGrid=monstro.posX/COMP_LINHA;   // Transforma a posi��o horizontal do monstro em um ponto da matriz
-    int posYGrid=monstro.posY/COMP_COLUNA;  // Transforma a posi��o vertical do monstro em um ponto da matriz
-
-    if (mapa[posYGrid+1][posXGrid+1]=='Z' || mapa[posYGrid+1][posXGrid+1]=='X')  // Verifica se logo abaixo e � direita possui um ch�o ou plataforma
-        return 1;                           // Se sim, retorna verdadeiro
+/* Essa função verifica se há um chão na direita do monstro */
+    // Transforma a posição do monstro em grid
+    int posXGrid=monstro.posX/COMP_LINHA;
+    int posYGrid=monstro.posY/COMP_COLUNA;
+    // Verifica se logo abaixo e à direita possui um chão ou plataforma
+    if (mapa[posYGrid+1][posXGrid+1]=='Z' || mapa[posYGrid+1][posXGrid+1]=='X')
+        return 1;
     else
-        return 0;                           // Se n�o, retorna falso
+        return 0;
 }
 
 int temChaoNaEsquerda(MONSTRO monstro, char mapa[TILES][TILES]){
-/* Essa fun��o verifica se h� um ch�o na esquerda do monstro */
-    int posXGrid=monstro.posX/COMP_LINHA;   // Transforma a posi��o horizontal do monstro em um ponto da matriz
-    int posYGrid=monstro.posY/COMP_COLUNA;  // Transforma a posi��o vertical do monstro em um ponto da matriz
-
-    if (mapa[posYGrid+1][posXGrid]=='Z' || mapa[posYGrid+1][posXGrid]=='X')    // Verifica se logo abaixo possui um ch�o ou plataforma, como a posi��o do monstro fica no canto superior esquerdo n�o precisa verificar mais para o lado
-        return 1;                           // Se sim, retorna verdadeiro
+/* Essa função verifica se há um chão na esquerda do monstro */
+    // Transforma a posição do monstro em grid
+    int posXGrid=monstro.posX/COMP_LINHA;
+    int posYGrid=monstro.posY/COMP_COLUNA;
+    // Verifica se logo abaixo possui um chão ou plataforma
+    if (mapa[posYGrid+1][posXGrid]=='Z' || mapa[posYGrid+1][posXGrid]=='X')
+        return 1;
     else
-        return 0;                           // Se n�o, retorna falso
+        return 0;
 }
