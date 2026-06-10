@@ -1,18 +1,19 @@
 #ifndef GRAFICOS_H
 #define GRAFICOS_H
 
+#include "raylib.h"
 #include "funcoesGerais.h"
 #include "player.h"
-#include "raylib.h"
 
 #define TAM_TILE 32
 
+/* Estrutura contendo os sprites */
 typedef struct{
     Texture2D player;
     Texture2D monstro;
     Texture2D tileset;
 } Spritesheet;
-
+/* Estrutura contendo os sons */
 typedef struct {
     Sound botao;
     Sound caminhada;
@@ -25,18 +26,19 @@ typedef struct {
     Sound monstro_dano;
     Sound tiro;
 } Soundtrack;
-
+/* Funções carregando e descarregando coisas da memória */
 void carregaSpritesheet(Spritesheet *sprites);
 void descarregaSpritesheet(Spritesheet *sprites);
 void carregaSoundtrack(Soundtrack *sounds);
 void descarregaSoundtrack(Soundtrack *sounds);
+/* Funções desenhando os elementos do jogo*/
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset);
 void exibeCabecalho(PLAYER p, int fase, int pontos);
 void atualizaAnimacaoPlayer(PLAYER *p);
 void desenhaPlayer(PLAYER p, Texture2D sprite);
 void atualizaAnimacaoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros);
 void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D sprite);
-
+/* Funções de apoio para as funções de desenho */
 Rectangle selecionaTile(int coluna, int linha, int tam_tile);
 Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile);
 Rectangle selecionaFramePlayer(PLAYER p);
