@@ -3,19 +3,18 @@
 
 #include "funcoesGerais.h"
 #include "monstro.h"
-
+/* Estrutura do player */
 typedef struct{
     int posX; float velX, accX;
     int posY; float velY, accY;
-    Direcao dir;
-
     int saude, invencibilidade;
     int naEscada, noChao, afetadoGravidade;
     int qtdTiros, cooldownTiro;
-
-    float animacaoTimer; int frameAtual;
+    int frameAtual; float animacaoTimer;
+    Direcao dir;
 } PLAYER;
 
+/* Funções que agem e modificam o player */
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaGravidadePlayer(PLAYER *p);
@@ -29,6 +28,7 @@ void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
 void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]);
 
+/* Funções que testam condições do player */
 int colidiuBordaEsquerda(PLAYER p);
 int colidiuBordaDireita(PLAYER p);
 int colidiuMonstro(PLAYER p, MONSTRO monstros[10], int qtdMonstros);
