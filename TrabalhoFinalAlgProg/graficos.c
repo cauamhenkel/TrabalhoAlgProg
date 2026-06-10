@@ -32,26 +32,6 @@ void descarregaSoundtrack(Soundtrack *sounds){
     UnloadSound(sounds->monstro_dano);
 }
 
-Rectangle selecionaTile(int coluna, int linha, int tam_tile){
-/* Essa função constrói um retângulo usando os valores de entrada como referência */
-    Rectangle tile = {coluna * tam_tile,
-                      linha * tam_tile,
-                      tam_tile,
-                      tam_tile};
-
-    return tile;
-}
-
-Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile){
-/* Não faço ideia, comenta melhor teus código Mateus, eu sou burro */ ////////////////////////////////////////////////////////////////////////////
-    Rectangle tile = {coluna * tam_tile,
-                      linha * tam_tile,
-                      -tam_tile,
-                      tam_tile};
-
-    return tile;
-}
-
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset){
 /* Essa função desenha o mapa usando o grid salvo como referência e um tileset */
     Rectangle tile, destino;
@@ -124,36 +104,6 @@ void atualizaAnimacaoPlayer(PLAYER *p){
     }
 }
 
-Rectangle selecionaFramePlayer(PLAYER p){
-/* Sei la que porra, Mateus comente isso aqui depois */ ///////////////////////////////////////////////////////////////////////////////
-    Rectangle fonte;
-
-    if (p.naEscada)
-        fonte = selecionaTile(p.frameAtual, 2, 16);
-    else if (p.dir == DIREITA) {
-        if (p.noChao) {
-            if (p.velX > 0.6)
-                fonte = selecionaTile(p.frameAtual, 1, 16);
-            else
-                fonte = selecionaTile(0, 0, 16);
-        }
-        else
-            fonte = selecionaTile(1, 0, 16);
-    }
-    else if (p.dir == ESQUERDA) {
-        if (p.noChao) {
-            if (p.velX < -0.6)
-                fonte = selecionaTileInverso(p.frameAtual, 1, 16);
-            else
-                fonte = selecionaTileInverso(0, 0, 16);
-        }
-        else
-            fonte = selecionaTileInverso(1, 0, 16);
-    }
-
-    return fonte;
-}
-
 void desenhaPlayer(PLAYER p, Texture2D sprite){
 /* Essa função desenha o player usando sua posição */
     // Retangulo referente ao sprite original
@@ -185,18 +135,6 @@ void atualizaAnimacaoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros){
     }
 }
 
-Rectangle selecionaFrameMonstro(MONSTRO monstro){
-/* Sei lá não entendo SOS Mateus */ //////////////////////////////////////////////////////////////////////////////////////////
-    Rectangle fonte;
-
-    if (monstro.dir == ESQUERDA)
-        fonte = selecionaTile(monstro.frameAtual, 0, 16);
-    else
-        fonte = selecionaTileInverso(monstro.frameAtual, 0, 16);
-
-    return fonte;
-}
-
 void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D sprite){
 /* Essa função desenha os monstros usando suas posições */
     // Itera um número de vezes igual a quantidade de monstros
@@ -214,4 +152,66 @@ void desenhaMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, Texture2D spr
             DrawTexturePro(sprite, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
         }
     }
+}
+
+Rectangle selecionaTile(int coluna, int linha, int tam_tile){
+/* Essa função constrói um retângulo usando os valores de entrada como referência */
+    Rectangle tile = {coluna * tam_tile,
+                      linha * tam_tile,
+                      tam_tile,
+                      tam_tile};
+
+    return tile;
+}
+
+Rectangle selecionaTileInverso(int coluna, int linha, int tam_tile){
+/* Não faço ideia, comenta melhor teus código Mateus, eu sou burro */ ////////////////////////////////////////////////////////////////////////////
+    Rectangle tile = {coluna * tam_tile,
+                      linha * tam_tile,
+                      -tam_tile,
+                      tam_tile};
+
+    return tile;
+}
+
+Rectangle selecionaFramePlayer(PLAYER p){
+/* Sei la que porra, Mateus comente isso aqui depois */ ///////////////////////////////////////////////////////////////////////////////
+    Rectangle fonte;
+
+    if (p.naEscada)
+        fonte = selecionaTile(p.frameAtual, 2, 16);
+    else if (p.dir == DIREITA) {
+        if (p.noChao) {
+            if (p.velX > 0.6)
+                fonte = selecionaTile(p.frameAtual, 1, 16);
+            else
+                fonte = selecionaTile(0, 0, 16);
+        }
+        else
+            fonte = selecionaTile(1, 0, 16);
+    }
+    else if (p.dir == ESQUERDA) {
+        if (p.noChao) {
+            if (p.velX < -0.6)
+                fonte = selecionaTileInverso(p.frameAtual, 1, 16);
+            else
+                fonte = selecionaTileInverso(0, 0, 16);
+        }
+        else
+            fonte = selecionaTileInverso(1, 0, 16);
+    }
+
+    return fonte;
+}
+
+Rectangle selecionaFrameMonstro(MONSTRO monstro){
+/* Sei lá não entendo SOS Mateus */ //////////////////////////////////////////////////////////////////////////////////////////
+    Rectangle fonte;
+
+    if (monstro.dir == ESQUERDA)
+        fonte = selecionaTile(monstro.frameAtual, 0, 16);
+    else
+        fonte = selecionaTileInverso(monstro.frameAtual, 0, 16);
+
+    return fonte;
 }
