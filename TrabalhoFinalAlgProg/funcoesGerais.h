@@ -31,8 +31,8 @@
 #define TAM_NOME_RANKING 20 // Quantidade de caracteres da string
 #define TAM_PLACAR 10
 #define QTD_PONTOS_INICIAIS 5000
-#define QTD_REDUZIR_PONTOS 200
 #define QTD_PONTOS_GANHO_DOS_INIMIGOS 500
+#define QTD_REDUZIR_PONTOS 200
 #define FRAMES_PARA_REDUZIR_PONTOS FPS*2
 #define TEMPO_PTS_SUBINDO 1.5f
 
@@ -89,6 +89,7 @@ typedef enum{
     DESATIVADO
 } EstadoObjeto;
 
+/* Estrutura do placar */
 typedef struct tipo_placar{
     char nome[TAM_NOME_RANKING];
     int pontos;
@@ -104,7 +105,7 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
 void desenhaTextoMenu(EstadoMenu opcaoMenu);
 void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]);
 void desenhaTextoPause(EstadoPausado opcaoPause);
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando);
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando, int qtdMonstrosMortos);
 void desenhaTextoDerrota(void);
 /* Funções para lidar com o mapa */
 void criaMapa(char mapa[TILES][TILES], int fase);
@@ -119,3 +120,4 @@ void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
 int vitoria(char mapa[TILES][TILES], int fase);
 
 #endif
+
