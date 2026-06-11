@@ -103,11 +103,15 @@ void desenhaTextoPause(EstadoPausado opcaoPause){
     desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
 }
 
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando){
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando, int qtdMonstrosMortos){
 /* Essa função desenha todo o conteúdo presente no menu de vitória jogo */
-    // Desenha as mensagens padrão
+    // Desenha os textos de vitória e traz uma mensagem adicional se o jogador terminar sem matar nenhum monstro
     DrawText("Voce venceu!", (LARGURA/2) - (MeasureText("Voce venceu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, GREEN);
-    DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), CABECALHO*3, FONTE_CABECALHO, GREEN);
+    if(qtdMonstrosMortos==0){
+        DrawText("No modo pacifista!", (LARGURA/2) - (MeasureText("No modo pacifista!", FONTE_GERAL)/2), CABECALHO*2.5, FONTE_GERAL, GREEN);
+    }
+    // A altura do texto dos pontos depende se há o texto sobre o modo pacifista ou não
+    DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), (qtdMonstrosMortos==0) ? CABECALHO*4.5 : CABECALHO*3, FONTE_CABECALHO, GREEN);
     DrawText("Digite seu nome:", (LARGURA/2) - (MeasureText("Digite seu nome:", FONTE_CABECALHO)/2), ALTURA/2, FONTE_CABECALHO, WHITE);
     // Desenha um retângulo para ser o fundo de onde será escrito o nome
     DrawRectangle(COMP_LINHA*2, (ALTURA+CABECALHO*2)/2, LARGURA-4*COMP_LINHA, COMP_COLUNA*2, WHITE);

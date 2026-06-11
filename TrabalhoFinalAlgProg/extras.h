@@ -22,6 +22,7 @@ void processaProjetil(PLAYER *p, PROJETIL *pr, char mapa[TILES][TILES], Soundtra
 void desenhaPontosSubindo(Vector2 vec);
 void desenhaProjetil(PROJETIL pr);
 
-Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *pontos);
+Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *qtdMonstrosMortos, int *pontos);
 
 #endif
+
