@@ -39,6 +39,7 @@ int main(){
     char caractereLido;                                   // Último caractere digitado pelo jogador
     int posCaractereAtual;                                // Posição atual na string do nome
     int piscando;                                         // Variável para a barra no menu de vitória ficar piscando
+    ModoVitoria modoVitoria;                              // Variável para avaliar o modo em que o player venceu
 
     /* Variáveis gráficas */
     Spritesheet sprites;                                  // Varoável para salvar os sprites da memória
@@ -69,9 +70,6 @@ int main(){
         switch (estado){
             case MENU:
                 // Roda o código do menu
-                // Som de pressionar o botão
-                if (IsKeyPressed(KEY_ENTER))
-                    PlaySound(sounds.botao);
                 // Muda a opção selecionada com as setinhas
                 if (IsKeyPressed(KEY_UP)){
                     if (opcaoMenu==MENU_JOGAR)
@@ -89,6 +87,8 @@ int main(){
                     case MENU_JOGAR:
                         // Se pressionar enter quando estiver nessa opção inicia o jogo
                         if (IsKeyPressed(KEY_ENTER)){
+                            PlaySound(sounds.botao);
+
                             // Coisas que precisam ser iniciadas todo inicio de jogo (e não inicio de fase)
                             estado=EM_JOGO;
                             iniciouFase=0;
@@ -99,15 +99,18 @@ int main(){
                             qtdTotalMonstros=0;
                             // Inicia vida do player
                             p.saude=P_VIDA_MAX;
-                            // Inicia os pontos e o contador para reduzí-los
+                            // Inicia os pontos e o contador para reduzí-los, o modo padrão de vitória é 'NORMAL'
                             pontos=QTD_PONTOS_INICIAIS;
                             framesReduzirPontos=0;
+                            modoVitoria=NORMAL;
                         }
                         break;
                     case MENU_RANKING:
                         // Se pressionar enter quando estiver nessa opção entra no ranking
-                        if (IsKeyPressed(KEY_ENTER))
+                        if (IsKeyPressed(KEY_ENTER)){
+                            PlaySound(sounds.botao);
                             estado = RANKING;
+                        }
 
                         break;
                     case MENU_SAIR:
@@ -121,6 +124,7 @@ int main(){
                     // Roda o código do ranking
                     // Se estiver no ranking a única interação possível é sair
                     if (IsKeyPressed(KEY_ENTER)){
+                        PlaySound(sounds.botao);
                         estado=MENU;
                         opcaoMenu=MENU_JOGAR;
                     }
@@ -128,9 +132,6 @@ int main(){
 
             case PAUSADO:
                 // Roda o código do menu de pause
-                // Som de pressionar o botão
-                if (IsKeyPressed(KEY_ENTER))
-                    PlaySound(sounds.botao);
                 // Muda a opção selecionada com as setinhas
                 if (IsKeyPressed(KEY_UP)){
                     if (opcaoPause==PAUSE_CONTINUAR)
@@ -147,14 +148,18 @@ int main(){
                 switch(opcaoPause){
                     case PAUSE_CONTINUAR:
                         // Se pressionar enter quando estiver nessa opção volta para o jogo
-                        if (IsKeyPressed(KEY_ENTER))
+                        if (IsKeyPressed(KEY_ENTER)){
+                            PlaySound(sounds.botao);
                             estado=EM_JOGO;
+                        }
                         break;
                     case PAUSE_VOLTAR_AO_MENU:
                         // Se pressionar enter quando estiver nessa opção volta para o menu
-                        if (IsKeyPressed(KEY_ENTER))
+                        if (IsKeyPressed(KEY_ENTER)){
+                            PlaySound(sounds.botao);
                             estado=MENU;
                             opcaoMenu=MENU_JOGAR;
+                        }
                         break;
                     case PAUSE_SAIR:
                         // Se pressionar enter quando estiver nessa opção fecha o jogo
@@ -183,7 +188,7 @@ int main(){
                 if (IsKeyPressed(KEY_ENTER) && strlen(nomeTemp)>0){
                     PlaySound(sounds.botao);
                     // Coloca o nome e pontos no placar, ordena ele e volta para o menu
-                    colocaNoPlacar(placar, nomeTemp, pontos);
+                    colocaNoPlacar(placar, nomeTemp, pontos, modoVitoria);
                     ordenarPlacar(placar);
                     estado = MENU;
                     opcaoMenu=MENU_JOGAR;
@@ -210,7 +215,12 @@ int main(){
                     posCaractereAtual=0;
                     piscando=0;
                     if (qtdMonstrosMortos==0){
+                        modoVitoria=PACIFISTA;
                         pontos+=(qtdTotalMonstros*QTD_PONTOS_GANHO_DOS_INIMIGOS*1.2);
+                    }
+                    if (qtdMonstrosMortos==qtdTotalMonstros){
+                        modoVitoria=GENOCIDA;
+                        pontos+=(qtdTotalMonstros*QTD_PONTOS_GANHO_DOS_INIMIGOS*0.1);
                     }
                 }
                 // Se não venceu
@@ -320,7 +330,7 @@ int main(){
                 case VITORIA:
                     // Desenha o menu de vitória
                     ClearBackground(BLACK);
-                    desenhaTextoVitoria(pontos, nomeTemp, &piscando, qtdMonstrosMortos);
+                    desenhaTextoVitoria(pontos, nomeTemp, &piscando, modoVitoria);
                     break;
 
                 case DERROTA:
