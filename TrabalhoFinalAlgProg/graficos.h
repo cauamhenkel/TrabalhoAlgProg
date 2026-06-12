@@ -33,7 +33,8 @@ void carregaSoundtrack(Soundtrack *sounds);
 void descarregaSoundtrack(Soundtrack *sounds);
 /* Funções desenhando os elementos do jogo*/
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset);
-void exibeCabecalho(PLAYER p, int fase, int pontos);
+void exibeSaude(PLAYER p, Spritesheet sprites);
+void exibeCabecalho(PLAYER p, Spritesheet sprites, int fase, int pontos);
 void atualizaAnimacaoPlayer(PLAYER *p);
 void desenhaPlayer(PLAYER p, Texture2D sprite);
 void atualizaAnimacaoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros);

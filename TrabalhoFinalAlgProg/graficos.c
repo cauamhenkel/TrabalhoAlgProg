@@ -79,9 +79,23 @@ void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset){
     }
 }
 
-void exibeCabecalho(PLAYER p, int fase, int pontos){
+void exibeSaude(PLAYER p, Spritesheet sprites) {
+    float posX = COMP_LINHA/4;
+
+    for (int i=0; i<p.saude; i++) {
+        Rectangle destino = { posX,
+                            COMP_COLUNA/2,
+                            COMP_LINHA * 1.2,
+                            COMP_COLUNA * 1.2};
+        posX += COMP_LINHA * 1.1;
+
+        DrawTexturePro(sprites.player, selecionaTile(0, 0, 16), destino, (Vector2){0,0}, 0.0f, WHITE);
+    }
+}
+
+void exibeCabecalho(PLAYER p, Spritesheet sprites, int fase, int pontos){
 /* Essa função desenha as informações do cabeçalho */
-    DrawText(TextFormat("Saude: %d", p.saude), COMP_COLUNA/2, (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+    exibeSaude(p, sprites);
     DrawText(TextFormat("Tiros: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Pontos: %d", pontos), (LARGURA/2)-(MeasureText("Pontos : 5000", FONTE_CABECALHO)/2), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Fase atual: %d", fase+1), LARGURA - (MeasureText("Fase atual: 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);

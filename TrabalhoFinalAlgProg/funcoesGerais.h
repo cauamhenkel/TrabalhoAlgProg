@@ -120,4 +120,3 @@ void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
 int vitoria(char mapa[TILES][TILES], int fase);
 
 #endif
-

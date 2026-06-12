@@ -332,7 +332,7 @@ int main(){
                 case EM_JOGO:
                     // Desenha o jogo
                     ClearBackground(GRAY);
-                    exibeCabecalho(p, fase, pontos);
+                    exibeCabecalho(p, sprites, fase, pontos);
                     desenhaMapa(mapa, sprites.tileset);
 
                     atualizaAnimacaoPlayer(&p);
