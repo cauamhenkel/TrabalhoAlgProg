@@ -89,10 +89,17 @@ typedef enum{
     DESATIVADO
 } EstadoObjeto;
 
+typedef enum{
+    NORMAL,
+    PACIFISTA,
+    GENOCIDA
+} ModoVitoria;
+
 /* Estrutura do placar */
 typedef struct tipo_placar{
     char nome[TAM_NOME_RANKING];
     int pontos;
+    ModoVitoria modoVitoria;
 } TIPO_PLACAR;
 
 /* Funções para o placar */
@@ -105,7 +112,7 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
 void desenhaTextoMenu(EstadoMenu opcaoMenu);
 void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]);
 void desenhaTextoPause(EstadoPausado opcaoPause);
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando, int qtdMonstrosMortos);
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING], int *piscando, ModoVitoria modoVitoria);
 void desenhaTextoDerrota(void);
 /* Funções para lidar com o mapa */
 void criaMapa(char mapa[TILES][TILES], int fase);
@@ -113,7 +120,7 @@ void corrigeMapa(char mapa[TILES][TILES]);
 /* Funções para lidar com os pontos e placar */
 void reduzPontos(int *pontos, int *framesReduzirPontos);
 void reiniciaNome(char nomeTemp[TAM_NOME_RANKING]);
-void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos);
+void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos, ModoVitoria modoVitoria);
 void ordenarPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
 
 /* Funções para fazer testes que devolvem booleanos*/

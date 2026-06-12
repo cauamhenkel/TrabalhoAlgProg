@@ -38,6 +38,7 @@ void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, 
 }
 
 void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar){
+/* Essa função desenha os retângulos do ranking com nome e pontos dentro, dando cor dependendo do modo vencido */
     // Salva as dimensões e posição do retângulo de entrada
     Rectangle retanguloBase = {posX, posY, largura, altura};
     // Cria um retangulo com proporções ajustadas para ser uma borda
@@ -51,10 +52,10 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
         DrawText(TextFormat("Nome: -------------------"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, RED);
         DrawText(TextFormat("Pontos: XxxxX"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, RED);
     }
-    // Se houver algum nome escreve os nomes no ranking
+    // Se houver algum nome escreve os nomes no ranking, com a cor da fonte dependendo do modo que o player venceu
     else{
-        DrawText(TextFormat("Nome: %s", placar.nome), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, RED);
-        DrawText(TextFormat("Pontos: %d",placar.pontos), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, RED);
+        DrawText(TextFormat("Nome: %s", placar.nome), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? BLUE : RED);
+        DrawText(TextFormat("Pontos: %d",placar.pontos), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? BLUE : RED);
     }
 }
 
@@ -103,15 +104,18 @@ void desenhaTextoPause(EstadoPausado opcaoPause){
     desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
 }
 
-void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando, int qtdMonstrosMortos){
+void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando, ModoVitoria modoVitoria){
 /* Essa função desenha todo o conteúdo presente no menu de vitória jogo */
     // Desenha os textos de vitória e traz uma mensagem adicional se o jogador terminar sem matar nenhum monstro
-    DrawText("Voce venceu!", (LARGURA/2) - (MeasureText("Voce venceu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, GREEN);
-    if(qtdMonstrosMortos==0){
+    DrawText("Voce venceu!", (LARGURA/2) - (MeasureText("Voce venceu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, (modoVitoria==GENOCIDA) ? RED : GREEN);
+    if (modoVitoria==PACIFISTA){
         DrawText("No modo pacifista!", (LARGURA/2) - (MeasureText("No modo pacifista!", FONTE_GERAL)/2), CABECALHO*2.5, FONTE_GERAL, GREEN);
     }
-    // A altura do texto dos pontos depende se há o texto sobre o modo pacifista ou não
-    DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), (qtdMonstrosMortos==0) ? CABECALHO*4.5 : CABECALHO*3, FONTE_CABECALHO, GREEN);
+    if (modoVitoria==GENOCIDA){
+        DrawText("No modo genocida!", (LARGURA/2) - (MeasureText("No modo genocida!", FONTE_GERAL)/2), CABECALHO*2.5, FONTE_GERAL, RED);
+    }
+    // A altura do texto dos pontos depende se há o texto sobre o modo pacifista/genocida ou não
+    DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), (modoVitoria==NORMAL) ? CABECALHO*3 : CABECALHO*4.5, FONTE_CABECALHO, (modoVitoria==GENOCIDA) ? RED : GREEN);
     DrawText("Digite seu nome:", (LARGURA/2) - (MeasureText("Digite seu nome:", FONTE_CABECALHO)/2), ALTURA/2, FONTE_CABECALHO, WHITE);
     // Desenha um retângulo para ser o fundo de onde será escrito o nome
     DrawRectangle(COMP_LINHA*2, (ALTURA+CABECALHO*2)/2, LARGURA-4*COMP_LINHA, COMP_COLUNA*2, WHITE);
@@ -188,7 +192,7 @@ void reiniciaNome(char nomeTemp[TAM_NOME_RANKING]){
     }
 }
 
-void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos){
+void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKING], int pontos, ModoVitoria modoVitoria){
 /* Essa função recebe o placar, o nome da pessoa e os pontos dela e coloca no placar se ela tiver os requisitos necessários */
     int nomeRepetido=0;
     // Analisa se já existe o nome no placar e se existir, substitui os pontos existentes se os pontos atuais forem maiores
@@ -197,6 +201,7 @@ void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKI
         if (strcmp(placar[i].nome,nomeTemp)==0){
             if (placar[i].pontos<pontos){
                 placar[i].pontos=pontos;
+                placar[i].modoVitoria=modoVitoria;
             }
             nomeRepetido=1;
         }
@@ -206,6 +211,7 @@ void colocaNoPlacar(TIPO_PLACAR placar[TAM_PLACAR], char nomeTemp[TAM_NOME_RANKI
         if (pontos>placar[TAM_PLACAR-1].pontos){
             strcpy(placar[TAM_PLACAR-1].nome, nomeTemp);
             placar[TAM_PLACAR-1].pontos=pontos;
+            placar[TAM_PLACAR-1].modoVitoria=modoVitoria;
         }
     }
 }
