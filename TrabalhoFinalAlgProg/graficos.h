@@ -12,6 +12,9 @@ typedef struct{
     Texture2D player;
     Texture2D monstro;
     Texture2D tileset;
+    Texture2D hud_saude;
+    Texture2D hud_tiro;
+    Texture2D background;
 } Spritesheet;
 /* Estrutura contendo os sons */
 typedef struct {
@@ -32,6 +35,7 @@ void descarregaSpritesheet(Spritesheet *sprites);
 void carregaSoundtrack(Soundtrack *sounds);
 void descarregaSoundtrack(Soundtrack *sounds);
 /* Funções desenhando os elementos do jogo*/
+void desenhaBackground(Spritesheet sprites);
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset);
 void exibeSaude(PLAYER p, Spritesheet sprites);
 void exibeCabecalho(PLAYER p, Spritesheet sprites, int fase, int pontos);

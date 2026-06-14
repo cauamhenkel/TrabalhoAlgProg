@@ -21,7 +21,7 @@ void descarregaSpritesheet(Spritesheet *sprites){
     UnloadTexture(sprites->tileset);
     UnloadTexture(sprites->hud_saude);
     UnloadTexture(sprites->hud_tiro);
-    UnloadTexture(sprites->hud_background);
+    UnloadTexture(sprites->background);
 }
 
 void carregaSoundtrack(Soundtrack *sounds){
@@ -36,6 +36,13 @@ void descarregaSoundtrack(Soundtrack *sounds){
     UnloadSound(sounds->botao);
     UnloadSound(sounds->tiro);
     UnloadSound(sounds->monstro_dano);
+}
+
+void desenhaBackground(Spritesheet sprites) {
+    /* Essa funcao desenha o background usando a funcao DrawTexturePro nativa do Raylib */
+    Rectangle fonte = {0, 0, 480, 512};
+    Rectangle destino = {0, 0, LARGURA, ALTURA + CABECALHO};
+    DrawTexturePro(sprites.background, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
 }
 
 void desenhaMapa(char mapa[TILES][TILES], Texture2D tileset){
@@ -91,18 +98,34 @@ void exibeSaude(PLAYER p, Spritesheet sprites) {
     for (int i=0; i<p.saude; i++) {
         Rectangle destino = { posX,
                             COMP_COLUNA/2,
-                            COMP_LINHA * 1.2,
-                            COMP_COLUNA * 1.2};
-        posX += COMP_LINHA * 1.1;
+                            COMP_LINHA * 1.5,
+                            COMP_COLUNA * 1.5};
+        posX += COMP_LINHA * 1.67;
 
-        DrawTexturePro(sprites.player, selecionaTile(0, 0, 16), destino, (Vector2){0,0}, 0.0f, WHITE);
+        DrawTexturePro(sprites.hud_saude, selecionaTile(0, 0, 16), destino, (Vector2){0,0}, 0.0f, WHITE);
+    }
+}
+
+void exibeTiro(PLAYER p, Spritesheet sprites) {
+    float posX = COMP_LINHA/2;
+
+    Rectangle fonte = {0,0,4,11};
+
+    for (int i=0; i<p.qtdTiros; i++) {
+        Rectangle destino = { posX,
+                            COMP_COLUNA * 2,
+                            COMP_LINHA/4,
+                            COMP_COLUNA};
+        posX += COMP_LINHA/2;
+
+        DrawTexturePro(sprites.hud_tiro, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
     }
 }
 
 void exibeCabecalho(PLAYER p, Spritesheet sprites, int fase, int pontos){
 /* Essa função desenha as informações do cabeçalho */
     exibeSaude(p, sprites);
-    DrawText(TextFormat("Tiros: %d", p.qtdTiros), COMP_COLUNA/2, (COMP_COLUNA*1.5)+(FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+    exibeTiro(p, sprites);
     DrawText(TextFormat("Pontos: %d", pontos), (LARGURA/2)-(MeasureText("Pontos : 5000", FONTE_CABECALHO)/2), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
     DrawText(TextFormat("Fase atual: %d", fase+1), LARGURA - (MeasureText("Fase atual: 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
 }

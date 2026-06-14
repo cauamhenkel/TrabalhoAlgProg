@@ -47,7 +47,7 @@
 #define P_VEL_ESCADA (COMP_COLUNA/5)
 #define P_VEL_PULO -(COMP_COLUNA/2)
 #define P_VIDA_MAX 3
-#define P_QTD_TIROS 1
+#define P_QTD_TIROS 3
 #define P_COOLDOWN_TIRO FPS
 
 /* CONSTANTES MONSTRO */

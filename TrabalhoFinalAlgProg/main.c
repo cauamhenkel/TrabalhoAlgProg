@@ -97,8 +97,9 @@ int main(){
                             // Acumulador de mortes para verificar se o player terminou sem matar nenhum monstro
                             qtdMonstrosMortos=0;
                             qtdTotalMonstros=0;
-                            // Inicia vida do player
+                            // Inicia vida e os tiros do player
                             p.saude=P_VIDA_MAX;
+                            p.qtdTiros=P_QTD_TIROS;
                             // Inicia os pontos e o contador para reduzí-los, o modo padrão de vitória é 'NORMAL'
                             pontos=QTD_PONTOS_INICIAIS;
                             framesReduzirPontos=0;
@@ -342,6 +343,8 @@ int main(){
                 case EM_JOGO:
                     // Desenha o jogo
                     ClearBackground(GRAY);
+                    desenhaBackground(sprites);
+
                     exibeCabecalho(p, sprites, fase, pontos);
                     desenhaMapa(mapa, sprites.tileset);
 
