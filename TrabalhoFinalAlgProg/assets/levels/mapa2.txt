@@ -17,14 +17,14 @@ ZZHZZZZZZZZZ        ZZZZZZZZZH
         S     D        S E    
  ZZZZZZZZZZZZZHZZZZZZZZZZZZZ  
               H               
-       D      S   E  D        
-      ZHZZZZZZZZZZZZZHZ       
+              H               
+       D      S      D        
+      ZZZZZZZZZZZZZZZZZ       
+       H             H        
        H             H        
  D    ES             S      D 
- HZZZZZZZZZZZZZZZZZZZZZZZZZZH 
+ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ 
+ H                          H 
  H                          H 
  S   P                      S 
- ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ 
-                              
-                              
-                              
+ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ  
