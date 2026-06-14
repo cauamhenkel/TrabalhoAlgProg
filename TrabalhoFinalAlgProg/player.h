@@ -10,7 +10,8 @@ typedef struct{
     int saude, invencibilidade;
     int naEscada, noChao, afetadoGravidade;
     int qtdTiros, cooldownTiro;
-    int frameAtual; float animacaoTimer;
+    int frameEscada, frameCaminhada;
+    float animacaoTimer;
     Direcao dir;
 } PLAYER;
 
@@ -25,7 +26,7 @@ void centralizaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
 void danoPlayer(PLAYER *p);
 void processaMovimentoPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
-void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES], Sound sound);
 void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]);
 
 /* Funções que testam condições do player */

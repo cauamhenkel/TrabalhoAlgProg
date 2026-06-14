@@ -1,4 +1,5 @@
 #include "player.h"
+#include "graficos.h"
 #include "raylib.h"
 
 void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
@@ -23,7 +24,8 @@ void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
     // p->qtdTiros=P_QTD_TIROS;
     p->cooldownTiro=0;
     p->animacaoTimer=0;
-    p->frameAtual=0;
+    p->frameEscada=0;
+    p->frameCaminhada=0;
 }
 
 void controlaGravidadePlayer(PLAYER *p, char mapa[TILES][TILES]){
@@ -150,13 +152,14 @@ void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]){
     }
 }
 
-void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES]){
+void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES], Sound sound){
 /* Essa função processa o pulo do player */
     // Se o player apertar o botão de pular, tira ele da escada
     if (IsKeyPressed(KEY_SPACE)){
         p->naEscada=0;
         // Se o player estiver em algum lugar que pode pular, aplica os efeitos do pulo
         if (playerNoChao(p, mapa) || playerNaPlataforma(p, mapa)){
+            PlaySound(sound);
             // Tira o player do chao para que nao fique preso, muda sua velocidade vertical e altera seu estado
             p->posY -= COMP_COLUNA/4;
             p->velY = P_VEL_PULO;

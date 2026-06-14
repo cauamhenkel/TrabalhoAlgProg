@@ -19,13 +19,8 @@ typedef struct{
 /* Estrutura contendo os sons */
 typedef struct {
     Sound botao;
-    Sound caminhada;
     Sound dano;
-    Sound gameover;
-    Sound mordida1;
-    Sound mordida2;
-    Sound salto1;
-    Sound salto2;
+    Sound salto;
     Sound monstro_dano;
     Sound tiro;
 } Soundtrack;

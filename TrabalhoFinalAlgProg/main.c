@@ -256,7 +256,7 @@ int main(){
                     /* MOVIMENTACAO PLAYER */
                     processaMovimentoPlayer(&p, mapa);
                     processaPlayerNaEscada(&p, mapa);
-                    processaPuloPlayer(&p, mapa);
+                    processaPuloPlayer(&p, mapa, sounds.salto);
 
                     /* FISICA PLAYER */
                     controlaGravidadePlayer(&p, mapa);
@@ -312,31 +312,36 @@ int main(){
             switch(estado){
                 case MENU:
                     // Desenha o menu
-                    ClearBackground(BLACK);
+                    ClearBackground(DARKGRAY);
+                    desenhaBackground(sprites);
                     desenhaTextoMenu(opcaoMenu);
                     break;
 
                 case RANKING:
                     // Desenha o menu de ranking
-                    ClearBackground(BLACK);
+                    ClearBackground(DARKGRAY);
+                    desenhaBackground(sprites);
                     desenhaTextoRanking(placar);
                     break;
 
                 case PAUSADO:
                     // Desenha o menu de pause
-                    ClearBackground(BLACK);
+                    ClearBackground(DARKGRAY);
+                    desenhaBackground(sprites);
                     desenhaTextoPause(opcaoPause);
                     break;
 
                 case VITORIA:
                     // Desenha o menu de vitória
-                    ClearBackground(BLACK);
+                    ClearBackground(DARKGRAY);
+                    desenhaBackground(sprites);
                     desenhaTextoVitoria(pontos, nomeTemp, &piscando, modoVitoria);
                     break;
 
                 case DERROTA:
                     // Desenha o menu de derrota
-                    ClearBackground(BLACK);
+                    ClearBackground(DARKGRAY);
+                    desenhaBackground(sprites);
                     desenhaTextoDerrota();
                     break;
 

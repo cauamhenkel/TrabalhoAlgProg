@@ -29,6 +29,7 @@ void carregaSoundtrack(Soundtrack *sounds){
     sounds->botao = LoadSound("assets/audio/botao.wav");
     sounds->tiro = LoadSound("assets/audio/tiro.wav");
     sounds->monstro_dano = LoadSound("assets/audio/monstrodano.wav");
+    sounds->salto = LoadSound("assets/audio/salto.wav");
 }
 
 void descarregaSoundtrack(Soundtrack *sounds){
@@ -36,6 +37,7 @@ void descarregaSoundtrack(Soundtrack *sounds){
     UnloadSound(sounds->botao);
     UnloadSound(sounds->tiro);
     UnloadSound(sounds->monstro_dano);
+    UnloadSound(sounds->salto);
 }
 
 void desenhaBackground(Spritesheet sprites) {
@@ -126,8 +128,8 @@ void exibeCabecalho(PLAYER p, Spritesheet sprites, int fase, int pontos){
 /* Essa função desenha as informações do cabeçalho */
     exibeSaude(p, sprites);
     exibeTiro(p, sprites);
-    DrawText(TextFormat("Pontos: %d", pontos), (LARGURA/2)-(MeasureText("Pontos : 5000", FONTE_CABECALHO)/2), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
-    DrawText(TextFormat("Fase atual: %d", fase+1), LARGURA - (MeasureText("Fase atual: 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, RED);
+    DrawText(TextFormat("%d", pontos), (LARGURA/2)-(MeasureText("5000", FONTE_CABECALHO)/2), (FONTE_BOTOES / 2), FONTE_CABECALHO, RAYWHITE);
+    DrawText(TextFormat("Fase %d", fase+1), LARGURA - (MeasureText("Fase 67", FONTE_CABECALHO)), (FONTE_BOTOES / 2), FONTE_CABECALHO, WHITE);
 }
 
 void atualizaAnimacaoPlayer(PLAYER *p){
@@ -140,12 +142,14 @@ void atualizaAnimacaoPlayer(PLAYER *p){
 
         if (p->noChao && (p->velX > 0.6 || p->velX < -0.6))
             // Animacao de caminhar tem 3 frames
-            p->frameAtual = (p->frameAtual + 1) % 3;
+            p->frameCaminhada = (p->frameCaminhada + 1) % 3;
         else if (p->naEscada && (IsKeyDown(KEY_W) || IsKeyDown(KEY_S)))
             // Animacao de escada tem 2 frames
-            p->frameAtual = (p->frameAtual + 1) % 2;
-        else
-            p->frameAtual =0;
+            p->frameEscada = (p->frameEscada + 1) % 2;
+        else {
+            p->frameEscada = 0;
+            p->frameCaminhada = 0;
+        }
     }
 }
 
@@ -225,11 +229,11 @@ Rectangle selecionaFramePlayer(PLAYER p){
     Rectangle fonte;
 
     if (p.naEscada)
-        fonte = selecionaTile(p.frameAtual, 2, 16);         // Animacao para o player subindo as escadas
+        fonte = selecionaTile(p.frameEscada, 2, 16);         // Animacao para o player subindo as escadas
     else if (p.dir == DIREITA) {
         if (p.noChao) {
             if (p.velX > 0.6)
-                fonte = selecionaTile(p.frameAtual, 1, 16); // Animacao para o player caminhando
+                fonte = selecionaTile(p.frameCaminhada, 1, 16); // Animacao para o player caminhando
             else
                 fonte = selecionaTile(0, 0, 16);            // Sprite para o player parado
         }
@@ -240,7 +244,7 @@ Rectangle selecionaFramePlayer(PLAYER p){
     else if (p.dir == ESQUERDA) {
         if (p.noChao) {
             if (p.velX < -0.6)
-                fonte = selecionaTileInverso(p.frameAtual, 1, 16);
+                fonte = selecionaTileInverso(p.frameCaminhada, 1, 16);
             else
                 fonte = selecionaTileInverso(0, 0, 16);
         }

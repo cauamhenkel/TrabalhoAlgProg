@@ -1,4 +1,5 @@
 #include "funcoesGerais.h"
+#include "raylib.h"
 
 void lePlacar(TIPO_PLACAR placar[TAM_PLACAR]){
     FILE *leitura;
@@ -34,7 +35,7 @@ void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, 
     // Desenha o interior do botão
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);
     // Faz o texto dentro do botão
-    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, RED);
+    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, DARKPURPLE);
 }
 
 void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar){
@@ -49,13 +50,13 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);
     // Se a posição no placar está vazia (ainda não encheu o placar de pessoas) coloca uma escrita genérica
     if (placar.nome[0]=='\0'){
-        DrawText(TextFormat("Nome: -------------------"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, RED);
-        DrawText(TextFormat("Pontos: XxxxX"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, RED);
+        DrawText(TextFormat("Nome: -------------------"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, DARKPURPLE);
+        DrawText(TextFormat("Pontos: XxxxX"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, DARKPURPLE);
     }
     // Se houver algum nome escreve os nomes no ranking, com a cor da fonte dependendo do modo que o player venceu
     else{
-        DrawText(TextFormat("Nome: %s", placar.nome), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? BLUE : RED);
-        DrawText(TextFormat("Pontos: %d",placar.pontos), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? BLUE : RED);
+        DrawText(TextFormat("Nome: %s", placar.nome), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? RED : DARKPURPLE);
+        DrawText(TextFormat("Pontos: %d",placar.pontos), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/2)+FONTE_RANKING, FONTE_RANKING, (placar.modoVitoria==PACIFISTA) ? DARKGREEN : (placar.modoVitoria==GENOCIDA) ? RED : DARKPURPLE);
     }
 }
 
@@ -66,27 +67,27 @@ void desenhaTextoMenu(EstadoMenu opcaoMenu){
         posBotao2 = posBotao1 + (COMP_COLUNA * 5),
         posBotao3 = posBotao2 + (COMP_COLUNA * 5);
     // Desenha o titulo
-    DrawText("Mario Games", (LARGURA/2) - (MeasureText("Mario Games", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
+    DrawText("Mario Games", (LARGURA/2) - (MeasureText("Mario Games", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
     // Desenha os botões, sendo que eles mudam de cor dependendo da opção do menu selecionada
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? GOLD : ORANGE, RED, "Jogar");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? GOLD : ORANGE, RED, "Ranking");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? GOLD : ORANGE, RED, "Sair");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? LIGHTGRAY : GRAY, DARKBROWN, "Jogar");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? LIGHTGRAY : GRAY, DARKBROWN, "Ranking");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? LIGHTGRAY : GRAY, DARKBROWN, "Sair");
 }
 
 void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]){
 /* Essa função desenha todo o conteúdo presente no menu de ranking jogo */
     // Título do menu ramking
-    DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
+    DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
     // Desenha todos os botões na esquerda
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GOLD, RED, placar[i]);
+        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GRAY, DARKBROWN, placar[i]);
     }
     // Desenha todos os botões na direita
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GOLD, RED, placar[i+TAM_PLACAR/2]);
+        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GRAY, DARKBROWN, placar[i+TAM_PLACAR/2]);
     }
     // Desenha um botão em baixo para voltar para o menu
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), COMP_COLUNA * 25, LARG_BOTOES, ALT_BOTOES, GOLD, RED, "Voltar ao menu");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), COMP_COLUNA * 25, LARG_BOTOES, ALT_BOTOES, LIGHTGRAY, DARKBROWN, "Voltar ao menu");
 }
 
 void desenhaTextoPause(EstadoPausado opcaoPause){
@@ -97,11 +98,11 @@ void desenhaTextoPause(EstadoPausado opcaoPause){
         posBotao3 = posBotao2 + (COMP_COLUNA * 5);
 
     // Desenha o titulo
-    DrawText("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
+    DrawText("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
     // Desenha os botões, sendo que eles mudam de cor dependendo da opção do menu selecionada
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? GOLD : ORANGE, RED, "Continuar");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? GOLD : ORANGE, RED, "Voltar ao menu");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? GOLD : ORANGE, RED, "Sair");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? LIGHTGRAY : GRAY, DARKBROWN, "Continuar");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? LIGHTGRAY : GRAY, DARKBROWN, "Voltar ao menu");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? LIGHTGRAY : GRAY, DARKBROWN, "Sair");
 }
 
 void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando, ModoVitoria modoVitoria){
