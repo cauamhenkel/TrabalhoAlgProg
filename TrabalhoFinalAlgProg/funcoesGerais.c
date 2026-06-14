@@ -80,11 +80,11 @@ void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]){
     DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
     // Desenha todos os botões na esquerda
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GRAY, DARKBROWN, placar[i]);
+        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, DARKBROWN, placar[i]);
     }
     // Desenha todos os botões na direita
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, GRAY, DARKBROWN, placar[i+TAM_PLACAR/2]);
+        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, DARKBROWN, placar[i+TAM_PLACAR/2]);
     }
     // Desenha um botão em baixo para voltar para o menu
     desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), COMP_COLUNA * 25, LARG_BOTOES, ALT_BOTOES, LIGHTGRAY, DARKBROWN, "Voltar ao menu");
