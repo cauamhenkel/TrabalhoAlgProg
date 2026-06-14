@@ -6,9 +6,12 @@
 
 void carregaSpritesheet(Spritesheet *sprites){
 /* Essa função carrega os sprites da memória para a variável do código */
-    sprites->player = LoadTexture("assets/player.png");
-    sprites->monstro = LoadTexture("assets/monstro.png");
-    sprites->tileset = LoadTexture("assets/tileset_2.png");
+    sprites->player = LoadTexture("assets/sprites/player.png");
+    sprites->monstro = LoadTexture("assets/sprites/monstro.png");
+    sprites->tileset = LoadTexture("assets/sprites/tileset_2.png");
+    sprites->hud_saude = LoadTexture("assets/sprites/hud_saude.png");
+    sprites->hud_tiro = LoadTexture("assets/sprites/hud_tiro.png");
+    sprites->background = LoadTexture("assets/sprites/background.png");
 }
 
 void descarregaSpritesheet(Spritesheet *sprites){
@@ -16,6 +19,9 @@ void descarregaSpritesheet(Spritesheet *sprites){
     UnloadTexture(sprites->player);
     UnloadTexture(sprites->monstro);
     UnloadTexture(sprites->tileset);
+    UnloadTexture(sprites->hud_saude);
+    UnloadTexture(sprites->hud_tiro);
+    UnloadTexture(sprites->hud_background);
 }
 
 void carregaSoundtrack(Soundtrack *sounds){
