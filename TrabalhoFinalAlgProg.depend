@@ -67,3 +67,67 @@
 	"extras.h"
 	"graficos.h"
 
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\extras.c
+	"raylib.h"
+	"extras.h"
+	"graficos.h"
+
+1781480959 c:\programas\trabalhos\trabalhofinalalgprog\extras.h
+	"raylib.h"
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+	"graficos.h"
+
+1781481626 c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.h
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1781480959 c:\programas\trabalhos\trabalhofinalalgprog\player.h
+	"funcoesGerais.h"
+	"monstro.h"
+
+1781480959 c:\programas\trabalhos\trabalhofinalalgprog\monstro.h
+	"funcoesGerais.h"
+
+1781480959 c:\programas\trabalhos\trabalhofinalalgprog\graficos.h
+	"raylib.h"
+	"funcoesGerais.h"
+	"player.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\funcoesgerais.c
+	"funcoesGerais.h"
+	"raylib.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\graficos.c
+	"raylib.h"
+	"graficos.h"
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"raylib.h"
+	"funcoesGerais.h"
+	"player.h"
+	"monstro.h"
+	"graficos.h"
+	"extras.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\monstro.c
+	"monstro.h"
+	"raylib.h"
+	"funcoesGerais.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\player.c
+	"player.h"
+	"graficos.h"
+	"raylib.h"
+
+1781480959 source:c:\programas\trabalhos\trabalhofinalalgprog\testes.c
+
