@@ -22,12 +22,14 @@ void processaGravidadePlayer(PLAYER *p);
 void processaAceleracaoPlayer(PLAYER *p);
 void processaAtritoPlayer(PLAYER *p);
 void corrigePersonagemY(PLAYER *p);
+void corrigePersonagemEscada(PLAYER *p, char mapa[TILES][TILES]);
 void centralizaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
 void danoPlayer(PLAYER *p);
 void processaMovimentoPlayer(PLAYER *p, char mapa[TILES][TILES]);
 void processaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]);
 void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES], Sound sound);
-void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaColisoesAmbientePlayer(PLAYER *p, char mapa[TILES][TILES]);
+void processaColisoesMonstros(PLAYER *p, MONSTRO monstros[M_QTD_MAX], int qtdMonstros, int *pontos);
 
 /* Funções que testam condições do player */
 int colidiuBordaEsquerda(PLAYER p);
