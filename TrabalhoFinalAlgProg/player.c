@@ -72,6 +72,17 @@ void corrigePersonagemY(PLAYER *p){
     p->posY-=(p->posY % COMP_COLUNA);
 }
 
+void corrigePersonagemEscada(PLAYER *p, char mapa[TILES][TILES]){
+/* Essa função corrige a posição do jogador se ele acabar saindo demais da escada */
+    // Testa se o player acabou subindo demais a escada
+    if (p->naEscada && !playerNaSubida(*p, mapa) &&  !playerNaEscada(*p, mapa) && !playerNaDescida(*p, mapa) && !playerNaEscadaComPlataforma(*p, mapa)){
+        // Corrige o personagem (acaba jogando ele pra cima)
+        corrigePersonagemY(p);
+        // Bota ele pra baixo
+        p->posY+=COMP_COLUNA;
+    }
+}
+
 void centralizaPlayerNaEscada(PLAYER *p, char mapa[TILES][TILES]){
 /* Essa função arruma a posição do player quando ele sobe a escada */
     // Transforma a posição do player em grid
@@ -168,7 +179,7 @@ void processaPuloPlayer(PLAYER *p, char mapa[TILES][TILES], Sound sound){
     }
 }
 
-void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]){
+void processaColisoesAmbientePlayer(PLAYER *p, char mapa[TILES][TILES]){
 /* Essa função processa os movimentos do player ao colidir com elementos do cenário */
     // Se o player estiver em um chão ou plataforma (e não está no modo de subir escada) corrige sua posição vertical e zera sua velocidade vertical
     if (playerNoChao(p, mapa) || playerNaPlataforma(p, mapa) && !(*p).naEscada){
@@ -187,6 +198,20 @@ void processaColisoesPlayer(PLAYER *p, char mapa[TILES][TILES]){
     if (colidiuBordaEsquerda(*p) || colidiuParedeEsquerda(*p, mapa)){
         p->posX+=1;
         p->velX=0;
+    }
+}
+
+void processaColisoesMonstros(PLAYER *p, MONSTRO monstros[M_QTD_MAX], int qtdMonstros, int *pontos){
+/* Essa função processa os efeitos de uma colisão do player com o monstro */
+    // Testa se há colisão e ele não está invencivel no momento
+    if (colidiuMonstro(*p, monstros, qtdMonstros) && p->invencibilidade == 0){
+        // Penalidades
+        danoPlayer(p);
+        *pontos-=QTD_REDUZIR_PONTOS*5;
+    }
+    // Diminui o tempo de invencibilidade todo frame
+    if (p->invencibilidade > 0){
+        (p->invencibilidade)--;
     }
 }
 
