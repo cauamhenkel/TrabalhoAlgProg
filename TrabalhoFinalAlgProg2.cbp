@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="TrabalhoFinalAlgProg2" />
+		<Option title="TrabalhoFinalAlgProg" />
 		<Option pch_mode="2" />
 		<Option compiler="mingw-w64" />
 		<Build>
@@ -13,7 +13,16 @@
 				<Option compiler="mingw-w64" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="../../../raylib-1" />
+					<Add directory="../../../raylib-1/include" />
 				</Compiler>
+				<Linker>
+					<Add library="raylib" />
+					<Add library="opengl32" />
+					<Add library="gdi32" />
+					<Add library="winmm" />
+					<Add directory="../../../raylib-1/lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/TrabalhoFinalAlgProg2" prefix_auto="1" extension_auto="1" />
@@ -31,7 +40,31 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="extras.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="extras.h" />
+		<Unit filename="funcoesGerais.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="funcoesGerais.h" />
+		<Unit filename="graficos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="graficos.h" />
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="monstro.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="monstro.h" />
+		<Unit filename="placar.bin" />
+		<Unit filename="player.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="player.h" />
+		<Unit filename="testes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
