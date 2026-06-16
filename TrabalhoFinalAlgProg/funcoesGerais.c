@@ -24,30 +24,49 @@ void salvaPlacar(TIPO_PLACAR placar[TAM_PLACAR]){
     fclose (escrita);
 }
 
+void desenhaTextoBorda(char texto[], int posX, int posY, int fonte, int tamBorda, Color corDentro, Color corBorda){
+/* Essa função desenha um texto com borda */
+    // Desenha as bordas do texto
+    DrawText(texto, posX+tamBorda, posY, fonte, corBorda);
+    DrawText(texto, posX-tamBorda, posY, fonte, corBorda);
+    DrawText(texto, posX, posY+tamBorda, fonte, corBorda);
+    DrawText(texto, posX, posY-tamBorda, fonte, corBorda);
+    // Desenha o texto em si
+    DrawText(texto, posX, posY, fonte, corDentro);
+}
+
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]){
 /* Essa função desenha um botão com as bordas arredondadas e um texto no centro */
     // Salva as dimensões e posição do retângulo de entrada
     Rectangle retanguloBase = {posX, posY, largura, altura};
+
     // Cria um retangulo com proporções ajustadas para ser uma borda
     Rectangle retanguloBorda = {posX-(COMP_LINHA/4), posY-(COMP_COLUNA/4), largura+(COMP_LINHA/2), altura+(COMP_COLUNA/2)};
+
     // Desenha a borda do botão
     DrawRectangleRounded(retanguloBorda, 0.4, 6, corBorda);
+
     // Desenha o interior do botão
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);
+
     // Faz o texto dentro do botão
-    DrawText(texto,(LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, DARKPURPLE);
+    desenhaTextoBorda(texto, (LARGURA/2)-(MeasureText(texto, FONTE_BOTOES)/2), posY+(altura/2)-(FONTE_BOTOES/2), FONTE_BOTOES, 2, PURPLE, COR_BORDA);
 }
 
 void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar){
 /* Essa função desenha os retângulos do ranking com nome e pontos dentro, dando cor dependendo do modo vencido */
     // Salva as dimensões e posição do retângulo de entrada
     Rectangle retanguloBase = {posX, posY, largura, altura};
+
     // Cria um retangulo com proporções ajustadas para ser uma borda
     Rectangle retanguloBorda = {posX-5, posY-5, largura+10, altura+10};
+
     // Desenha a borda do botão
     DrawRectangleRounded(retanguloBorda, 0.4, 6, corBorda);
+
     // Desenha o interior do botão
     DrawRectangleRounded(retanguloBase, 0.3, 6, corDentro);
+
     // Se a posição no placar está vazia (ainda não encheu o placar de pessoas) coloca uma escrita genérica
     if (placar.nome[0]=='\0'){
         DrawText(TextFormat("Nome: -------------------"), posX+(COMP_LINHA/5), posY+(COMP_COLUNA/5), FONTE_RANKING, DARKPURPLE);
@@ -63,31 +82,35 @@ void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corD
 void desenhaTextoMenu(EstadoMenu opcaoMenu){
 /* Essa função desenha todo o conteúdo presente no menu do jogo */
     // Algumas constantes para posicionar os botões corretamente na tela
-    int posBotao1 = COMP_COLUNA * 10,
+    int posBotao1 = COMP_COLUNA * 12,
         posBotao2 = posBotao1 + (COMP_COLUNA * 5),
         posBotao3 = posBotao2 + (COMP_COLUNA * 5);
+
     // Desenha o titulo
-    DrawText("Mario Games", (LARGURA/2) - (MeasureText("Mario Games", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
+    desenhaTextoBorda("El Cowboy", (LARGURA/2) - (MeasureText("El Cowboy", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, BORDA_FONTE_GERAL, PURPLE, BLACK);
+    desenhaTextoBorda("Emiliano", (LARGURA/2) - (MeasureText("Emiliano", FONTE_GERAL*1.2)/2), CABECALHO+FONTE_GERAL*1.2, FONTE_GERAL*1.2, BORDA_FONTE_GERAL, PURPLE, BLACK);
+
     // Desenha os botões, sendo que eles mudam de cor dependendo da opção do menu selecionada
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? LIGHTGRAY : GRAY, DARKBROWN, "Jogar");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? LIGHTGRAY : GRAY, DARKBROWN, "Ranking");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? LIGHTGRAY : GRAY, DARKBROWN, "Sair");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_JOGAR) ? LIGHTGRAY : GRAY, COR_BORDA, "Jogar");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_RANKING) ? LIGHTGRAY : GRAY, COR_BORDA, "Ranking");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoMenu==MENU_SAIR) ? LIGHTGRAY : GRAY, COR_BORDA, "Sair");
 }
 
 void desenhaTextoRanking(TIPO_PLACAR placar[TAM_PLACAR]){
 /* Essa função desenha todo o conteúdo presente no menu de ranking jogo */
     // Título do menu ramking
-    DrawText("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
+    desenhaTextoBorda("Ranking", (LARGURA/2) - (MeasureText("Ranking", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, BORDA_FONTE_GERAL, PURPLE, COR_BORDA);
+
     // Desenha todos os botões na esquerda
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, DARKBROWN, placar[i]);
+        desenhaBotaoRanking((LARGURA/2)-LARG_BOTOES_RANKING-(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, COR_BORDA, placar[i]);
     }
     // Desenha todos os botões na direita
     for (int i=0 ; i<(TAM_PLACAR/2) ; i++){
-        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, DARKBROWN, placar[i+TAM_PLACAR/2]);
+        desenhaBotaoRanking((LARGURA/2)+(COMP_LINHA/2), ALT_BOTOES*(i+2)*1.2, LARG_BOTOES_RANKING, ALT_BOTOES_RANKING, LIGHTGRAY, COR_BORDA, placar[i+TAM_PLACAR/2]);
     }
     // Desenha um botão em baixo para voltar para o menu
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), COMP_COLUNA * 25, LARG_BOTOES, ALT_BOTOES, LIGHTGRAY, DARKBROWN, "Voltar ao menu");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES_GRANDES/2), COMP_COLUNA * 25, LARG_BOTOES_GRANDES, ALT_BOTOES, LIGHTGRAY, COR_BORDA, "Voltar ao menu");
 }
 
 void desenhaTextoPause(EstadoPausado opcaoPause){
@@ -98,11 +121,12 @@ void desenhaTextoPause(EstadoPausado opcaoPause){
         posBotao3 = posBotao2 + (COMP_COLUNA * 5);
 
     // Desenha o titulo
-    DrawText("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, PURPLE);
+    desenhaTextoBorda("Jogo pausado", (LARGURA/2) - (MeasureText("Jogo pausado", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, BORDA_FONTE_GERAL, PURPLE, COR_BORDA);
+
     // Desenha os botões, sendo que eles mudam de cor dependendo da opção do menu selecionada
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao1, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? LIGHTGRAY : GRAY, DARKBROWN, "Continuar");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao2, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? LIGHTGRAY : GRAY, DARKBROWN, "Voltar ao menu");
-    desenhaBotao((LARGURA/2)-(LARG_BOTOES/2), posBotao3, LARG_BOTOES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? LIGHTGRAY : GRAY, DARKBROWN, "Sair");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES_GRANDES/2), posBotao1, LARG_BOTOES_GRANDES, ALT_BOTOES, (opcaoPause==PAUSE_CONTINUAR) ? LIGHTGRAY : GRAY, COR_BORDA, "Continuar");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES_GRANDES/2), posBotao2, LARG_BOTOES_GRANDES, ALT_BOTOES, (opcaoPause==PAUSE_VOLTAR_AO_MENU) ? LIGHTGRAY : GRAY, COR_BORDA, "Voltar ao menu");
+    desenhaBotao((LARGURA/2)-(LARG_BOTOES_GRANDES/2), posBotao3, LARG_BOTOES_GRANDES, ALT_BOTOES, (opcaoPause==PAUSE_SAIR) ? LIGHTGRAY : GRAY, COR_BORDA, "Sair");
 }
 
 void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *piscando, ModoVitoria modoVitoria){
@@ -118,10 +142,13 @@ void desenhaTextoVitoria(int pontos, char nomeTemp[TAM_NOME_RANKING+1], int *pis
     // A altura do texto dos pontos depende se há o texto sobre o modo pacifista/genocida ou não
     DrawText(TextFormat("Voce fez %d pontos",pontos), (LARGURA/2) - (MeasureText("Voce fez XxxX pontos", FONTE_CABECALHO)/2), (modoVitoria==NORMAL) ? CABECALHO*3 : CABECALHO*4.5, FONTE_CABECALHO, (modoVitoria==GENOCIDA) ? RED : GREEN);
     DrawText("Digite seu nome:", (LARGURA/2) - (MeasureText("Digite seu nome:", FONTE_CABECALHO)/2), ALTURA/2, FONTE_CABECALHO, WHITE);
+
     // Desenha um retângulo para ser o fundo de onde será escrito o nome
     DrawRectangle(COMP_LINHA*2, (ALTURA+CABECALHO*2)/2, LARGURA-4*COMP_LINHA, COMP_COLUNA*2, WHITE);
+
     // Escreve o nome que está sendo escrito em tempo real pelo jogador
     DrawText(TextFormat("%s",nomeTemp), COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, BLACK);
+
     // Coloca uma barrinha piscando no final para indicar onde está escrevendo
     DrawText(TextFormat(" |"), MeasureText(TextFormat("%s", nomeTemp), FONTE_CABECALHO)+COMP_LINHA*2.5, ((ALTURA+CABECALHO*2)/2)+COMP_COLUNA-(FONTE_CABECALHO/2), FONTE_CABECALHO, (*piscando % (FPS*2)) > (FPS) ? WHITE : BLACK);
     (*piscando)++;
@@ -131,7 +158,7 @@ void desenhaTextoDerrota(void){
 /* Essa função desenha todo o conteúdo presente no menu de derrota jogo */
     // Desenha os textos na tela
     DrawText("Voce morreu!", (LARGURA/2) - (MeasureText("Voce morreu!", FONTE_GERAL)/2), CABECALHO, FONTE_GERAL, RED);
-    DrawText("Pressione ENTER para voltar ao menu", (LARGURA/2) - (MeasureText("Pressione ENTER para voltar ao menu", FONTE_CABECALHO)/2), (ALTURA+CABECALHO)/2, FONTE_CABECALHO, WHITE);
+    DrawText("Pressione ENTER para voltar ao menu", (LARGURA/2) - (MeasureText("Pressione ENTER para voltar ao menu", FONTE_CABECALHO*0.75)/2), (ALTURA+CABECALHO)/2, FONTE_CABECALHO*0.75, WHITE);
 }
 
 void criaMapa(char mapa[TILES][TILES], int fase){
@@ -237,8 +264,10 @@ int vitoria(char mapa[TILES][TILES], int fase){
     FILE *leitura;
     // Variável para salvar momentaneamente o nome do arquivo
     char nomeArquivo[50];
+
     // Salva o nome do arquivo que será aberto com base no número da fase de entrada
     sprintf(nomeArquivo, "assets/levels/mapa%d.txt", fase);
+
     // Abre o arquivo de entrada no ponteiro e se a leitura der errado quer dizer que já passou todos os mapas
     if ((leitura = fopen(nomeArquivo, "r")) == NULL){
         return 1;
