@@ -21,7 +21,6 @@ void iniciaPlayer(PLAYER *p, char mapa[TILES][TILES]){
     p->accX=P_ACC_X;
     p->invencibilidade=0;
     p->naEscada=0;
-    // p->qtdTiros=P_QTD_TIROS;
     p->cooldownTiro=0;
     p->animacaoTimer=0;
     p->frameEscada=0;

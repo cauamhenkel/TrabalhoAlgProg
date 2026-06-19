@@ -6,7 +6,7 @@ void criaProjetil(PLAYER p, PROJETIL *pr){
 /* Essa função cria um projetil com base na posição do player */
     // Muda o estado e coloca sua posição Y
     pr->estado=ATIVO;
-    pr->posY=p.posY+COMP_COLUNA/2;
+    pr->posY=p.posY+COMP_COLUNA/4;
     // Se o player estiver virado para a direita, cria na direita do player
     if (p.dir==DIREITA){
         pr->posX=p.posX+COMP_LINHA;
@@ -76,7 +76,7 @@ void desenhaProjetil(PROJETIL pr){
     // Desenha apenas se ele estiver ativo
     if (pr.estado==ATIVO)
         // Por algum motivo precisa desenhar mais pra baixo a posição do tiro, senão ele sai voando
-        DrawRectangle(pr.posX, pr.posY+(COMP_COLUNA*1.5), COMP_LINHA/5, COMP_COLUNA/5, WHITE);
+        DrawRectangle(pr.posX, pr.posY+CABECALHO, COMP_LINHA/5, COMP_COLUNA/5, WHITE);
 }
 
 Vector2 mataMonstrosProjetil(PLAYER *p, PROJETIL *pr, MONSTRO monstros[10], int qtdMonstros, int *qtdMonstrosMortos, int *pontos){

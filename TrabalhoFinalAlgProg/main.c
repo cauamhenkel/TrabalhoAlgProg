@@ -8,8 +8,10 @@
 #include "monstro.h"
 #include "graficos.h"
 #include "extras.h"
+#include "custcene.h"
 
 int main(){
+    cutscene();
 
     /* Variáveis gerais */
     EstadoJogo estado = MENU;                             // Variável usada para verificar o estado do jogo, começa no menu
@@ -272,6 +274,7 @@ int main(){
                     /* PROJETIL */
                     processaProjetil(&p, &pr, mapa, sounds);
                     Vector2 morte_monstro = mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &qtdMonstrosMortos, &pontos);
+
                     if (morte_monstro.x != -1.0f) {
                         PlaySound(sounds.monstro_dano);
                         ultima_morte_monstro = morte_monstro; // Salva o ultimo ponto em que um monstro morreu
@@ -279,7 +282,7 @@ int main(){
                     }
                     if (timer_pontos_subindo > 0.0f) {
                         timer_pontos_subindo -= GetFrameTime(); // Diminui o timer independentemente do FPS
-                        ultima_morte_monstro.y -= 0.5f; // Faz com que os pontinhos subam 1 pixel por frame
+                        ultima_morte_monstro.y -= 0.5f; // Faz com que os pontinhos subam 0.5 pixel por frame
                     }
 
                     // Se o player morrer ou cair do mapa acaba o jogo e garante a derrota
