@@ -38,7 +38,7 @@ void regulaMovimentoMonstros(MONSTRO monstros[M_QTD_MAX], int qtdMonstros, char 
         if (monstros[i].estadoMonstro==ATIVO){
              // Verifica se o monstro está tocando a borda esquerda e altera sua direção se necessário
             if (monstros[i].posX-1<0)
-                monstros[i].velX*=-1;
+                 monstros[i].velX*=-1;
             // Verifica se o monstro está se movendo para a direita
             else if (monstros[i].velX>0){
                 // Verifica se tem chão na sua frente e se necessário muda sua direção

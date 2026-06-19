@@ -8,8 +8,10 @@
 #include "monstro.h"
 #include "graficos.h"
 #include "extras.h"
+#include "custcene.h"
 
 int main(){
+    cutscene();
 
     /* Variáveis gerais */
     EstadoJogo estado = MENU;                             // Variável usada para verificar o estado do jogo, começa no menu
@@ -256,6 +258,7 @@ int main(){
                     /* MOVIMENTACAO PLAYER */
                     processaMovimentoPlayer(&p, mapa);
                     processaPlayerNaEscada(&p, mapa);
+                    corrigePersonagemEscada(&p, mapa);
                     processaPuloPlayer(&p, mapa, sounds.salto);
 
                     /* FISICA PLAYER */
@@ -265,11 +268,13 @@ int main(){
                     processaAtritoPlayer(&p);
 
                     /* COLISOES PLAYER */
-                    processaColisoesPlayer(&p, mapa);
+                    processaColisoesAmbientePlayer(&p, mapa);
+                    processaColisoesMonstros(&p, monstros, qtdMonstros, &pontos);
 
                     /* PROJETIL */
                     processaProjetil(&p, &pr, mapa, sounds);
                     Vector2 morte_monstro = mataMonstrosProjetil(&p, &pr, monstros, qtdMonstros, &qtdMonstrosMortos, &pontos);
+
                     if (morte_monstro.x != -1.0f) {
                         PlaySound(sounds.monstro_dano);
                         ultima_morte_monstro = morte_monstro; // Salva o ultimo ponto em que um monstro morreu
@@ -277,24 +282,9 @@ int main(){
                     }
                     if (timer_pontos_subindo > 0.0f) {
                         timer_pontos_subindo -= GetFrameTime(); // Diminui o timer independentemente do FPS
-                        ultima_morte_monstro.y -= 0.5f; // Faz com que os pontinhos subam 1 pixel por frame
+                        ultima_morte_monstro.y -= 0.5f; // Faz com que os pontinhos subam 0.5 pixel por frame
                     }
-                    // Testa se o player acabou subindo demais a escada
-                    if (p.naEscada && !playerNaSubida(p, mapa) &&  !playerNaEscada(p, mapa) && !playerNaDescida(p, mapa) && !playerNaEscadaComPlataforma(p, mapa)){
-                        // Corrige o personagem (acaba jogando ele pra cima)
-                        corrigePersonagemY(&p);
-                        // Bota ele pra baixo
-                        p.posY+=COMP_COLUNA;
-                    }
-                    // Testa se o player colidiu com um monstro aplica as penalidades se ele não estiver no tempo de invencibilidade
-                    if (colidiuMonstro(p, monstros, qtdMonstros) && p.invencibilidade == 0){
-                        danoPlayer(&p);
-                        pontos-=QTD_REDUZIR_PONTOS*5;
-                    }
-                    // Diminui o tempo de invencibilidade todo frame
-                    if (p.invencibilidade > 0){
-                        p.invencibilidade--;
-                    }
+
                     // Se o player morrer ou cair do mapa acaba o jogo e garante a derrota
                     if (p.saude == 0 || caiuDoMapa(p)) {
                         estado = DERROTA;

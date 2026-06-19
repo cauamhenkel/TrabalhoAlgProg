@@ -20,11 +20,14 @@
 /* CONSTANTES PARA OS BOTÕES */
 #define LARG_BOTOES (COMP_LINHA*8)
 #define ALT_BOTOES (COMP_COLUNA*3)
+#define LARG_BOTOES_GRANDES (COMP_LINHA*10)
 #define LARG_BOTOES_RANKING LARG_BOTOES
 #define ALT_BOTOES_RANKING ALT_BOTOES*0.75
+#define COR_BORDA CLITERAL(Color){ 60, 60, 60, 255 }
 /* CONSTANTES PARA AS FONTES DO JOGO */
 #define FONTE_GERAL (COMP_LINHA*3)
-#define FONTE_BOTOES (COMP_LINHA)
+#define BORDA_FONTE_GERAL (COMP_LINHA*0.2)
+#define FONTE_BOTOES (COMP_LINHA*1.2)
 #define FONTE_RANKING (COMP_LINHA/1.8)
 #define FONTE_CABECALHO (FONTE_BOTOES * 1.3)
 /* CONSTANTES PARA O PLACAR E PONTOS */
@@ -106,6 +109,7 @@ typedef struct tipo_placar{
 void lePlacar(TIPO_PLACAR placar[TAM_PLACAR]);
 void salvaPlacar(TIPO_PLACAR placar[TAM_PLACAR]);
 /* Funções para desenhar os botões */
+void desenhaTextoBorda(char texto[], int posX, int posY, int fonte, int tamBorda, Color corDentro, Color corBorda);
 void desenhaBotao(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, const char texto[20]);
 void desenhaBotaoRanking(int posX, int posY, int largura, int altura, Color corDentro, Color corBorda, TIPO_PLACAR placar);
 /* Funções para desenhar os diferentes menus do jogo */
