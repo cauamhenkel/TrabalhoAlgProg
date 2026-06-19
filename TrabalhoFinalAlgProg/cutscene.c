@@ -39,31 +39,57 @@ void cutscene(void) {
 
     int frameAtual = 1;
 
+    Rectangle fonte = {0,0,48,36};
+    Rectangle destino = {SCREEN_POS_X, SCREEN_POS_Y, SCREEN_SIZE, SCREEN_SIZE*3/4};
     int sair_custcene = 0;
 
     InitWindow(LARGURA, ALTURA+CABECALHO, "Cutscene");
     SetTargetFPS(FPS);
 
-    while (!WindowShouldClose() && sair_custcene == 0) {
+    Texture2D cenas[5];
+    cenas[0] = LoadTexture("cutscene/cutscene1.png");
+    cenas[1] = LoadTexture("cutscene/cutscene2.png");
+    cenas[2] = LoadTexture("cutscene/cutscene3.png");
+    cenas[3] = LoadTexture("cutscene/cutscene4.png");
+    cenas[4] = LoadTexture("cutscene/cutscene5.png");
 
+    int iteraCena = 0;
+
+    InitAudioDevice();
+    Music undertale = LoadMusicStream("assets/audio/cutscene_undertale.mp3");
+    PlayMusicStream(undertale);
+
+    while (!WindowShouldClose() && sair_custcene == 0) {
+        Texture2D cenaAtual = cenas[iteraCena];
 
         BeginDrawing();
             ClearBackground(BLACK);
 
-            DrawRectangle(SCREEN_POS_X, SCREEN_POS_Y, SCREEN_SIZE, SCREEN_SIZE*3/4, GRAY);
+            DrawTexturePro(cenaAtual, fonte, destino, (Vector2){0,0}, 0.0f, WHITE);
 
-            writeLine(&dialogo, &frameAtual);
+            writeLine(&dialogo, &frameAtual, &iteraCena);
 
         EndDrawing();
+
+        UpdateMusicStream(undertale);
 
         if (IsKeyPressed(KEY_ENTER))
             sair_custcene = 67;
     }
 
+    UnloadMusicStream(undertale);
+    CloseAudioDevice();
+
+    UnloadTexture(cenas[0]);
+    UnloadTexture(cenas[1]);
+    UnloadTexture(cenas[2]);
+    UnloadTexture(cenas[3]);
+    UnloadTexture(cenas[4]);
+
     CloseWindow();
 }
 
-void writeLine(TextBox *tb, int *frame) {
+void writeLine(TextBox *tb, int *frame, int *iteraCena) {
     tb->timer += GetFrameTime();
 
     if (IsKeyPressed(KEY_K)) {
@@ -73,7 +99,7 @@ void writeLine(TextBox *tb, int *frame) {
         tb->linhaAtual = 0;
         tb->timer = 0;
         tb->iterador = 0;
-        updateLine(tb, *frame);
+        updateLine(tb, *frame, iteraCena);
     }
 
     if (tb->linhaAtual < TB_LINES && tb->timer >= 1.0/10.0 && tb->mensagens[tb->linhaAtual][tb->iterador] != '\0') {
@@ -83,8 +109,13 @@ void writeLine(TextBox *tb, int *frame) {
         tb->linhas[tb->linhaAtual][tb->iterador] = '\0';
 
         if (tb->mensagens[tb->linhaAtual][tb->iterador] == '\0') {
+            if (*frame == 4 && tb->linhaAtual == 1){
+                (*iteraCena)++;
+                tb->linhaAtual++;
+                tb->iterador=0; }
+            else {
             tb->linhaAtual++;
-            tb->iterador=0;
+            tb->iterador=0; }
         }
     }
 
@@ -94,7 +125,7 @@ void writeLine(TextBox *tb, int *frame) {
                 strcpy(tb->linhas[k], "");
             (*frame)++;
             tb->linhaAtual = 0;
-            updateLine(tb, *frame);
+            updateLine(tb, *frame, iteraCena);
         }
     }
 
@@ -103,15 +134,20 @@ void writeLine(TextBox *tb, int *frame) {
     }
 }
 
-void updateLine(TextBox *tb, int frame) {
+void updateLine(TextBox *tb, int frame, int *iteraCena) {
     switch (frame) {
+    case 1:
+        break;
+
     case 2:
+        (*iteraCena)++;
         strcpy(tb->mensagens[0], "Seus hobbies de infancia eram");
-        strcpy(tb->mensagens[1], "atirar com revolver, subir");
-        strcpy(tb->mensagens[2], "escadas e procurar gemas.");
+        strcpy(tb->mensagens[1], "atirar com seu revolver, subir");
+        strcpy(tb->mensagens[2], "escadas e procurar por gemas.");
         break;
 
     case 3:
+        (*iteraCena)++;
         strcpy(tb->mensagens[0], "Aos 28 anos de idade,");
         strcpy(tb->mensagens[1], "casou-se com Oriana, o amor");
         strcpy(tb->mensagens[2], "de sua vida.");
@@ -124,21 +160,25 @@ void updateLine(TextBox *tb, int frame) {
         break;
 
     case 5:
+        if (*iteraCena != 3)
+           *iteraCena = 3;
         strcpy(tb->mensagens[0], "Depois disso tudo, o que");
         strcpy(tb->mensagens[1], "sobrou para El Nuestro Cowboy");
         strcpy(tb->mensagens[2], "foram seus antigos talentos.");
         break;
 
     case 6:
-        strcpy(tb->mensagens[0], "Atirar com o revolver,");
-        strcpy(tb->mensagens[1], "subir escadas e");
-        strcpy(tb->mensagens[2], "procurar gemas preciosas.");
+        *iteraCena = 1;
+        strcpy(tb->mensagens[0], "Atirar com o revolver.");
+        strcpy(tb->mensagens[1], "Subir escadas.");
+        strcpy(tb->mensagens[2], "Procurar por gemas preciosas.");
         break;
 
     case 7:
+        *iteraCena = 4;
         strcpy(tb->mensagens[0], "Nao importa quantos cavalos");
-        strcpy(tb->mensagens[1], "zumbi ele tenha que matar (ou");
-        strcpy(tb->mensagens[2], "ignorar) pelo caminho.");
+        strcpy(tb->mensagens[1], "zumbi ele tenha que exterminar");
+        strcpy(tb->mensagens[2], "(ou ignorar) pelo caminho.");
         break;
     }
 }

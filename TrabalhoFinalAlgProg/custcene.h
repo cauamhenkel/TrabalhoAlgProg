@@ -16,7 +16,7 @@ typedef struct {
 } TextBox;
 
 void cutscene(void);
-void writeLine(TextBox *tb, int *frame);
-void updateLine(TextBox *tb, int frame);
+void writeLine(TextBox *tb, int *frame, int *iteraCena);
+void updateLine(TextBox *tb, int frame, int *iteraCena);
 
 #endif
